@@ -64,23 +64,44 @@ the contributing institutions.
 
 ## Redistribution authority
 
-> **TODO — blocking before submission and launch.**
->
-> A written, cohort-by-cohort determination is required, covering for each
-> contributing cohort:
->
-> - that participant consent permits public release of aggregate,
->   non-identifiable summary statistics
-> - ownership of the source data and of the derived aggregate layer
-> - authority to grant a CC BY 4.0 licence over the derived layer
-> - permission for commercial reuse, which CC BY 4.0 allows
-> - whether the institution requires named attribution
->
-> Any cohort or sample that cannot be covered must be excluded from the
-> release, and the sample counts in [cohorts.md](cohorts.md) and the
-> frequencies themselves recomputed accordingly.
->
-> This section will be replaced with the determination summary once obtained.
+Public release of the aggregate layer requires a written, **cohort-by-cohort
+determination** confirming that each contributing cohort may lawfully be
+included. The determination is recorded in the table below. A cohort is
+included in a release **only** when every column is confirmed; any cohort that
+cannot be confirmed is excluded, and the sample counts in
+[cohorts.md](cohorts.md) and the frequencies themselves are recomputed
+accordingly.
+
+Each row is signed off by the contributing institution's data owner (or an
+authorized representative) together with the Choi Laboratory. Confirmation
+values are `Yes`, `No`, or `Pending`; a release proceeds only when no
+in-scope row is `No` or `Pending`.
+
+| Cohort | Consent permits public aggregate release¹ | Source-data owner | Authority to grant CC BY 4.0 over derived layer | Commercial reuse permitted² | Named attribution required³ | Determination date / signatory |
+|---|---|---|---|---|---|---|
+| National Integrated Bio-Big Data (KOBIC) | *Pending* | KOBIC | *Pending* | *Pending* | *Pending* | *Pending* |
+| Jeju Genome | *Pending* | Invites Genomics | *Pending* | *Pending* | *Pending* | *Pending* |
+| Korea4K | *Pending* | KOGIC | *Pending* | *Pending* | *Pending* | *Pending* |
+| Korea10K | *Pending* | KOGIC | *Pending* | *Pending* | *Pending* | *Pending* |
+
+¹ Public release of **aggregate, non-identifiable summary statistics** (site-level
+allele counts, allele numbers, allele frequencies, homozygote counts, call rates,
+filters, and callability). This is **not** a determination about participant-level
+data, which is not published here.
+² CC BY 4.0 permits commercial reuse. A cohort whose consent or governing
+agreement forbids commercial reuse cannot be released under CC BY 4.0 and must
+be excluded (or released, if authorized, under a separately negotiated licence —
+which the AWS Open Data Sponsorship Program does not accommodate, as it requires
+a permissive, no-cost licence).
+³ If an institution requires named acknowledgement, record the exact required
+wording in [CITATION.md](../CITATION.md#acknowledging-the-contributing-cohorts).
+
+> **Status: blocking before submission and launch.** The table above is
+> `Pending` for every cohort. It must be completed — with written evidence held
+> on file by the Choi Laboratory and the institutional legal/IRB office — before
+> the repository URL is submitted to AWS and before any data is published. Record
+> the IRB/data-access-committee approval reference for each cohort alongside the
+> signed determination.
 
 ---
 

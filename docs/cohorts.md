@@ -30,12 +30,24 @@ performed as part of the pipeline; see [methods.md](methods.md).
 
 ### Ascertainment
 
-> **TODO.** Define and publish the ascertainment basis for each cohort — how
-> participants were recruited, and what disease status information is
-> available. Do not describe the cohort as a "healthy control" set unless that
-> label is supported cohort-by-cohort. Where ascertainment differs between
-> cohorts, say so explicitly: users applying KOVA3 frequencies to a specific
-> disease need to know whether cases of that disease could be present.
+KOVA3 does **not** claim to be a healthy-control panel. The contributing cohorts
+were ascertained under their own independent study designs, which differ, and
+KOVA3 records each cohort's basis rather than applying a single label across all
+of them. Users applying KOVA3 frequencies to a specific disease should read the
+per-cohort ascertainment before assuming that cases of that disease are absent.
+
+| Cohort | Ascertainment basis (how participants were recruited) | Disease-status information available | Could cases of a given disease be present? |
+|---|---|---|---|
+| National Integrated Bio-Big Data (KOBIC) | *TODO* | *TODO* | *TODO* |
+| Jeju Genome | *TODO* | *TODO* | *TODO* |
+| Korea4K | *TODO* | *TODO* | *TODO* |
+| Korea10K | *TODO* | *TODO* | *TODO* |
+
+> **TODO — complete before launch.** Fill the table above from each cohort's
+> study protocol. State explicitly where ascertainment differs between cohorts.
+> Do **not** label any cohort a "healthy control" set unless that is supported by
+> that cohort's own protocol. This affects how users interpret allele
+> frequencies for disease-specific analyses.
 
 ### Planned additions
 
@@ -49,22 +61,26 @@ release will receive a new major version. See
 
 ## Consent and governance
 
-> **TODO — blocking before submission and launch.**
->
-> This section must summarize, for each contributing cohort:
->
-> - the consent instrument under which participants were enrolled
-> - whether that consent permits public release of aggregate,
->   non-identifiable summary statistics without access controls
-> - the IRB or ethics committee approval covering secondary use and
->   aggregate publication, with approval numbers
-> - the data provision agreement between the source institution and Korea
->   University governing the derived release
-> - any cohort-specific restriction that limits what may be published
->
-> Until each of these is confirmed in writing, the corresponding cohort cannot
-> be included in a CC BY 4.0 release. See
-> [data-owners.md](data-owners.md#redistribution-authority).
+For each contributing cohort, the following must be confirmed in writing before
+the cohort can be included in a CC BY 4.0 release. The table records the
+consent instrument, whether that consent permits public aggregate release, the
+governing IRB/ethics approval, and the data provision agreement with Korea
+University. The **licensing authority** consequences of these confirmations are
+tracked in [data-owners.md](data-owners.md#redistribution-authority); this
+table is the governance evidence behind that determination.
+
+| Cohort | Consent instrument | Consent permits public aggregate release, no access controls | IRB / ethics approval (with number) | Data provision agreement with Korea University | Cohort-specific publication restriction |
+|---|---|---|---|---|---|
+| National Integrated Bio-Big Data (KOBIC) | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
+| Jeju Genome | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
+| Korea4K | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
+| Korea10K | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
+
+> **Status: blocking before submission and launch.** Every row is `Pending`.
+> Until a cohort's row is fully confirmed in writing (evidence held on file by
+> the Choi Laboratory and the institutional legal/IRB office), that cohort
+> **cannot** be included in the release or in the allele-number denominators.
+> Record the approval numbers directly in the table when obtained.
 
 ### Summary of the position taken
 
