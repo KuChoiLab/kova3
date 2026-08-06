@@ -120,6 +120,7 @@ layer, live in [`tutorials/`](tutorials/).
 
 | Document | Contents |
 |---|---|
+| [Controlled-tier data access](docs/data-access.md) | Who may apply for participant-level data, and how |
 | [License and data owners](docs/data-owners.md) | Licence terms, data ownership, attribution requirements |
 | [Cohorts and consent](docs/cohorts.md) | Contributing cohorts, sample counts, consent basis |
 | [Methods and QC](docs/methods.md) | Joint genotyping pipeline, QC, batch-effect assessment |
