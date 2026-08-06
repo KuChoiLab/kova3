@@ -1,9 +1,13 @@
 # File tree and release manifest
 
-## Bucket layout
+KOVA3 occupies two buckets: one for the open tier, which anyone may read, and
+one for the controlled tier, which is readable only by applicants who hold an
+active Data Use Agreement. Their layouts are given separately below.
+
+## Open-tier bucket layout
 
 ```
-s3://<BUCKET>/
+s3://<OPEN_BUCKET>/
 ├── README.md                          # Points here; orientation for users arriving at the bucket
 ├── LICENSE                            # CC BY 4.0
 ├── CHANGELOG.md                       # Release history
@@ -16,11 +20,12 @@ s3://<BUCKET>/
 │   ├── schemas.md
 │   ├── subpopulations.md
 │   ├── file-tree.md
-│   └── versioning.md
+│   ├── versioning.md
+│   └── data-access.md
 │
 ├── metadata/
 │   ├── release=<RELEASE>/
-│   │   ├── manifest.json              # Every object, size, checksum — see below
+│   │   ├── manifest.json              # Every object, size, checksum; see below
 │   │   ├── cohort_summary.tsv         # Aggregate cohort metadata
 │   │   ├── cohort_summary.parquet
 │   │   ├── qc_summary.tsv             # Sample and variant QC counts
@@ -35,7 +40,6 @@ s3://<BUCKET>/
         ├── sites_vcf/
         │   ├── kova3.chr1.sites.vcf.gz
         │   ├── kova3.chr1.sites.vcf.gz.tbi
-        │   ├── kova3.chr1.sites.vcf.gz.csi
         │   ├── ...
         │   ├── kova3.chrX.sites.vcf.gz
         │   ├── kova3.chrY.sites.vcf.gz
@@ -54,11 +58,51 @@ s3://<BUCKET>/
             └── kova3.call_rate.chr1.<ext>
 ```
 
-> **TODO:** replace `<BUCKET>` and `<RELEASE>` throughout once assigned, and
-> settle the callability file format and extension — see
-> [methods.md](methods.md#callability). Confirm whether chrM is included; if
-> mitochondrial variants are not called, remove that line rather than shipping
+> **TODO:** replace `<OPEN_BUCKET>`, `<CONTROLLED_BUCKET>`, and `<RELEASE>`
+> throughout once assigned, and settle the callability file format and extension
+> see [methods.md](methods.md#callability). Confirm whether chrM is included;
+> if mitochondrial variants are not called, remove that line rather than shipping
 > an empty file.
+
+---
+
+## Controlled-tier bucket layout
+
+Readable only with credentials issued after an application is approved. The
+per-sample manifest is the entry point: read-level format varies by sample, so
+resolve availability from the manifest rather than by listing the bucket.
+
+```
+s3://<CONTROLLED_BUCKET>/
+├── manifest/
+│   ├── samples.tsv                    # One row per sample: cohort, formats held, object keys
+│   └── samples.parquet
+│
+├── fastq/
+│   └── <COHORT>/<SAMPLE>/             # Paired-end, gzip-compressed
+│       ├── <SAMPLE>_R1.fastq.gz
+│       └── <SAMPLE>_R2.fastq.gz
+│
+├── cram/
+│   └── <COHORT>/<SAMPLE>/             # CRAM 3.0 against GRCh38
+│       ├── <SAMPLE>.cram
+│       └── <SAMPLE>.cram.crai
+│
+├── gvcf/
+│   └── <COHORT>/<SAMPLE>/
+│       ├── <SAMPLE>.g.vcf.gz
+│       └── <SAMPLE>.g.vcf.gz.tbi
+│
+└── msvcf/
+    └── release=<RELEASE>/             # Genotyped multi-sample VCF, chromosome-sharded
+        ├── kova3.chr1.vcf.gz
+        ├── kova3.chr1.vcf.gz.tbi
+        └── ...
+```
+
+A sample appears under `fastq/`, under `cram/`, or under both, depending on
+what the contributing cohort holds. No sample is present in neither. See
+[cohorts.md](cohorts.md) for the per-cohort breakdown.
 
 ---
 
@@ -90,9 +134,15 @@ handle and would force clients to seek through an index covering the whole
 genome. Per-chromosome shards keep index sizes small and let users fetch one
 chromosome.
 
-**Both `.tbi` and `.csi` indexes.** `.tbi` is universally supported but cannot
-address positions beyond 2^29; `.csi` handles longer contigs. Publishing both
-avoids forcing a choice on users.
+**`.tbi` indexes only.** `.tbi` cannot address positions beyond 2^29 bases, but
+the longest GRCh38 contig, chr1, is 249 Mb, well inside that limit. Publishing
+`.csi` alongside would add a second index for no additional reach.
+
+**Sites-only VCF, not BCF.** BCF is smaller than bgzip-compressed VCF when
+per-sample genotype columns dominate the file. A sites-only callset has no
+genotype columns, and measured on a representative shard the BCF is about 15
+per cent larger than the VCF. Users who prefer BCF can convert locally with
+`bcftools view -Ob`.
 
 **Top-level `data/`, `metadata/`, `docs/` prefixes with a README at the root.**
 This follows the layout recommended in the AWS Open Data onboarding handbook,
@@ -135,7 +185,7 @@ object with its size and checksum.
 ```bash
 # Every object carries a published SHA-256 checksum. Verify after download.
 aws s3 cp --no-sign-request \
-  s3://<BUCKET>/data/release=<RELEASE>/sites_vcf/kova3.chr1.sites.vcf.gz .
+  s3://<OPEN_BUCKET>/data/release=<RELEASE>/sites_vcf/kova3.chr1.sites.vcf.gz .
 
 sha256sum kova3.chr1.sites.vcf.gz
 # Compare against the sha256 field for this key in manifest.json.
@@ -146,5 +196,5 @@ sha256sum kova3.chr1.sites.vcf.gz
 ```bash
 # No AWS account or credentials are required.
 aws s3 ls --no-sign-request \
-  s3://<BUCKET>/data/release=<RELEASE>/sites_vcf/
+  s3://<OPEN_BUCKET>/data/release=<RELEASE>/sites_vcf/
 ```

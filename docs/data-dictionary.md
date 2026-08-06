@@ -19,7 +19,7 @@ before reading the tables below.
 **The `G` prefix means global.** iGG writes each metric twice: once for the
 current processing batch, and once for the whole cohort, with the cohort-wide
 name prefixed by `G`. KOVA3 aggregates every contributing cohort into one
-callset, so **the `G`-prefixed fields are the ones users want** — `GAF` is the
+callset, so **the `G`-prefixed fields are the ones users want**. `GAF` is the
 Korean allele frequency; `AF` is a per-batch artefact of how the callset was
 assembled and carries no population meaning.
 
@@ -32,7 +32,7 @@ Fields KOVA3 computes itself, because iGG does not emit them, are marked
 **derived** and named with a `KOVA3_` prefix so they cannot collide with any
 DRAGEN field.
 
-> **TODO — before launch.** The field list below is taken from the DRAGEN v4.4
+> **TODO, before launch.** The field list below is taken from the DRAGEN v4.4
 > iGG documentation. Confirm it against the header of the produced callset,
 > since the emitted set depends on the DRAGEN version and on the
 > `--gg-msvcf-info-fields` value used:
@@ -48,7 +48,7 @@ DRAGEN field.
 > explicitly via `--gg-msvcf-info-fields`, or with `=All`. A run left at the
 > default produces a callset with no allele frequency field at all.
 
-Source: [DRAGEN v4.4 — Population Genotyping](https://help.dragen.illumina.com/dragen-v4.4/product-guide/dragen-v4.4/dragen-dna-pipeline/iterative-gvcf-genotyper.md)
+Source: [DRAGEN v4.4 Population Genotyping](https://help.dragen.illumina.com/dragen-v4.4/product-guide/dragen-v4.4/dragen-dna-pipeline/iterative-gvcf-genotyper.md)
 
 ---
 
@@ -58,11 +58,11 @@ Source: [DRAGEN v4.4 — Population Genotyping](https://help.dragen.illumina.com
 |---|---|
 | `CHROM` | Chromosome, GRCh38, `chr`-prefixed contig naming |
 | `POS` | 1-based position of the first reference base |
-| `ID` | Variant identifier. `.` unless a dbSNP rsID is assigned — see note below |
+| `ID` | Variant identifier. `.` unless a dbSNP rsID is assigned; see note below |
 | `REF` | Reference allele |
 | `ALT` | Alternate allele |
 | `QUAL` | Site quality. iGG reports the maximum input QUAL across the cohort at this site |
-| `FILTER` | Filter status — see [FILTER values](#filter-values) |
+| `FILTER` | Filter status; see [FILTER values](#filter-values) |
 
 > **TODO:** confirm whether dbSNP rsIDs are assigned in `ID`, and if so, state
 > the dbSNP build used.
@@ -113,7 +113,7 @@ iGG also writes unprefixed `AC`, `AN`, `AF`, `NS`, `NS_GT`, `NS_NOGT`, and
 > **TODO:** decide whether to retain the unprefixed batch fields in the public
 > release. Recommendation: **drop them.** They reflect how the callset was
 > sharded during processing, carry no population meaning, and are a predictable
-> source of user error — someone will filter on `AF` thinking it is the Korean
+> source of user error: someone will filter on `AF` thinking it is the Korean
 > frequency. If they are retained, this section must say so prominently.
 
 ---
@@ -121,7 +121,7 @@ iGG also writes unprefixed `AC`, `AN`, `AF`, `NS`, `NS_GT`, `NS_NOGT`, and
 ## Cohort quality-control fields
 
 Metrics for assessing whether a site is well called. These are computed only at
-diploid sites, and are missing where they cannot be calculated — for example
+diploid sites, and are missing where they cannot be calculated, for example
 where only one allele is present, or where no sample is genotyped.
 
 | Field | Number | Type | Description |
@@ -143,7 +143,7 @@ in [methods.md](methods.md#residual-cohort-effect-assessment).
 ## Allelic balance fields
 
 Site-wise read-support balance, computed across all samples. One value per
-allele, **including the reference allele**. A value of −1 codes missing — for
+allele, **including the reference allele**. A value of −1 codes missing, for
 example where an allele has no homozygous calls.
 
 | Field | Number | Type | Description |
@@ -155,7 +155,7 @@ example where an allele has no homozygous calls.
 These fields are only produced if allelic depth was imported during aggregation.
 
 > **TODO:** confirm whether allelic depth was imported in the KOVA3 run. If it
-> was not, remove this section — the fields will be absent from the output.
+> was not, remove this section, since the fields will be absent from the output.
 
 ---
 
@@ -208,7 +208,7 @@ The required order is:
 |---|---|
 | `PASS` | Site passed all filters |
 
-iGG applies hard filters to global metrics — `QUAL`, `GNS_GT`, `GIC`, `GHWEc2`,
+iGG applies hard filters to global metrics (`QUAL`, `GNS_GT`, `GIC`, `GHWEc2`,
 and `GABHetP` are the available filtering criteria. Filtering is per-site, so
 SNVs and indels cannot be filtered separately as they can in the variant caller.
 
@@ -247,6 +247,6 @@ identifiers, and no participant-level annotations. A sites-only VCF has no
 `FORMAT` column and no sample columns; tools expecting them will see a cohort of
 zero samples.
 
-In particular, none of the iGG per-sample fields — `GT`, `GQ`, `LAD`, `LPL`,
-`LAA`, `FT`, and the other localized genotype metrics — appear in the public
+In particular, none of the iGG per-sample fields (`GT`, `GQ`, `LAD`, `LPL`,
+`LAA`, `FT`, and the other localized genotype metrics) appear in the public
 release. They exist only in the internal callset.

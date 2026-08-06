@@ -2,9 +2,9 @@
 
 ## Licence
 
-KOVA3 data, documentation, schemas, and tutorial notebooks are released under
-the **Creative Commons Attribution 4.0 International Public License
-(CC BY 4.0)**.
+The KOVA3 **open tier**, together with this documentation, the schemas, and the
+tutorial notebooks, is released under the **Creative Commons Attribution 4.0
+International Public License (CC BY 4.0)**.
 
 Full licence text: <https://creativecommons.org/licenses/by/4.0/legalcode>
 
@@ -12,8 +12,16 @@ You are free to share and adapt the material for any purpose, including
 commercial use, provided you give appropriate credit, link to the licence, and
 indicate whether changes were made.
 
-No additional restrictions apply. There is no registration, no data access
-agreement, no fee, and no approval step. Access requires no AWS account.
+No additional restrictions apply to the open tier. There is no registration, no
+data access agreement, no fee, and no approval step. Access requires no AWS
+account.
+
+The **controlled tier** is not covered by CC BY 4.0. Participant-level FASTQ,
+CRAM, per-sample gVCF, and the genotyped multi-sample VCF are released under the
+KOVA3 Data Use Agreement, at no cost, to academic researchers for non-commercial
+research. The agreement prohibits redistribution and re-identification. See
+[data-access.md](data-access.md) for eligibility, the application process, and
+the agreement terms.
 
 ### Required attribution
 
@@ -51,14 +59,15 @@ for those two cohorts.
 
 ### What ownership covers
 
-The CC BY 4.0 grant applies to the **published aggregate layer only** — the
+The CC BY 4.0 grant applies to the **published aggregate layer only**. It covers the
 site-level allele counts, allele numbers, allele frequencies, homozygote
 counts, call rates, filters, callability resources, and aggregate cohort
 metadata described in this repository.
 
-It does **not** extend to the underlying participant-level FASTQ, CRAM, gVCF,
-or genotype data, which are not published here and remain under the control of
-the contributing institutions.
+It does **not** extend to the underlying participant-level FASTQ, CRAM, gVCF, or
+genotype data. Those remain under the control of the contributing institutions
+and are released only through the controlled tier, under the terms in
+[data-access.md](data-access.md).
 
 ---
 
@@ -87,30 +96,58 @@ in-scope row is `No` or `Pending`.
 ¹ Public release of **aggregate, non-identifiable summary statistics** (site-level
 allele counts, allele numbers, allele frequencies, homozygote counts, call rates,
 filters, and callability). This is **not** a determination about participant-level
-data, which is not published here.
+data. Controlled-tier release requires a separate, equally explicit determination
+from each contributing institution; see the second table below.
 ² CC BY 4.0 permits commercial reuse. A cohort whose consent or governing
 agreement forbids commercial reuse cannot be released under CC BY 4.0 and must
-be excluded (or released, if authorized, under a separately negotiated licence —
+be excluded (or released, if authorized, under a separately negotiated licence,
 which the AWS Open Data Sponsorship Program does not accommodate, as it requires
 a permissive, no-cost licence).
 ³ If an institution requires named acknowledgement, record the exact required
 wording in [CITATION.md](../CITATION.md#acknowledging-the-contributing-cohorts).
 
-> **Status: blocking before submission and launch.** The table above is
-> `Pending` for every cohort. It must be completed — with written evidence held
-> on file by the Choi Laboratory and the institutional legal/IRB office — before
-> the repository URL is submitted to AWS and before any data is published. Record
-> the IRB/data-access-committee approval reference for each cohort alongside the
+### Controlled-tier determination
+
+Hosting participant-level data on AWS and releasing it to approved applicants
+requires its own written determination, separate from the aggregate one above.
+Consent that permits aggregate release does not by itself permit controlled
+redistribution of reads and genotypes.
+
+| Cohort | Consent permits controlled redistribution of participant-level data | Authority to host on AWS infrastructure outside the source institution | Authority to release to approved third-party researchers | Cross-border transfer permitted (applicants outside Korea) | Determination date / signatory |
+|---|---|---|---|---|---|
+| National Integrated Bio-Big Data (KOBIC) | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
+| Jeju Genome | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
+| Korea4K | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
+| Korea10K | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
+
+A cohort that cannot be confirmed for controlled redistribution is excluded from
+the controlled tier. Exclusion from the controlled tier does not by itself
+exclude a cohort from the open tier, and the two tables are decided
+independently.
+
+> **Status: blocking before submission and launch.** Both tables above are
+> `Pending` for every cohort. They must be completed, with written evidence held
+> on file by the Choi Laboratory and the institutional legal and IRB offices,
+> before the repository URL is submitted to AWS and before any data is
+> published. Record the IRB approval reference for each cohort alongside the
 > signed determination.
 
 ---
 
 ## Privacy position
 
-KOVA3 publishes aggregate site-level statistics only. No individual genotypes,
-sequence reads, or participant identifiers are included, so the release does
+The **open tier** publishes aggregate site-level statistics only. No individual
+genotypes, sequence reads, or participant identifiers are included, so it does
 not carry individual-level re-identification risk of the kind associated with
-genotype-level data sharing.
+genotype-level data sharing. The conversion that produces it strips every
+per-sample genotype column and rewrites the file header, so no sample
+identifier, pedigree line, source path, or internal batch label survives into
+the published files.
+
+The **controlled tier** does contain individually identifiable genomic data.
+That is why it is released under an agreement rather than a licence: recipients
+are bound not to attempt re-identification, not to redistribute, and to hold the
+data on institution-managed systems accessible only to named users.
 
 > **TODO:** state whether a minimum allele-count threshold or other
 > small-cell suppression is applied to very rare variants, and if so, the

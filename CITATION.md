@@ -13,7 +13,7 @@ Registry of Open Data on AWS: TODO-registry-url
 ```
 
 > **TODO:** replace with the final citation once the accompanying publication
-> and the Registry of Open Data entry exist. Add a DOI if one is minted — a
+> and the Registry of Open Data entry exist. Add a DOI if one is minted, since a
 > Zenodo deposit of each release is a straightforward way to obtain one.
 
 A Citation File Format entry is provided at the repository root
@@ -27,10 +27,10 @@ KOVA3 builds on two earlier Korean variant frequency resources. If your work
 draws on the KOVA lineage rather than only the current release, cite these as
 well.
 
-- **KOVA** — *The Korean Variant Archive (KOVA): a reference database of genetic
+- **KOVA**: *The Korean Variant Archive (KOVA): a reference database of genetic
   variations in the Korean population.* Scientific Reports, 2017.
   doi:[10.1038/s41598-017-04642-4](https://doi.org/10.1038/s41598-017-04642-4)
-- **KOVA2** — *A database of 5305 healthy Korean individuals reveals genetic and
+- **KOVA2**: *A database of 5305 healthy Korean individuals reveals genetic and
   clinical implications for an East Asian population.* Experimental & Molecular
   Medicine, 2022; 5,305 individuals.
   doi:[10.1038/s12276-022-00871-4](https://doi.org/10.1038/s12276-022-00871-4)

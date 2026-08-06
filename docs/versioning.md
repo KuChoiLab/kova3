@@ -32,7 +32,7 @@ Always record the release tag used in any analysis, and cite it in
 publications. Release paths include the tag:
 
 ```
-s3://<BUCKET>/data/release=v3.0.0/...
+s3://<OPEN_BUCKET>/data/release=v3.0.0/...
 ```
 
 There is no "latest" alias that silently moves. This is deliberate: a moving
@@ -67,7 +67,7 @@ We aim to acknowledge within five working days.
 
 ### How corrections are handled
 
-1. The error is reproduced and its scope determined — which sites, which
+1. The error is reproduced and its scope determined: which sites, which
    fields, which releases are affected.
 2. An **erratum** is published under `metadata/errata/` describing the error,
    its scope, and its impact on interpretation. This happens as soon as the
@@ -89,14 +89,14 @@ and a silent replacement does not tell them.
 
 Each release and each erratum is announced through:
 
-- GitHub releases and the issue tracker on this repository
+- GitHub releases and the issue tracker on this repository. Watch the
+  repository with the Releases filter to be notified of each release.
 - The Choi Laboratory website at <https://choi.korea.ac.kr/>
-- The KOVA3 announcement mailing list — low volume, releases and errata only
+- The laboratory X account [@jungminchoilab](https://x.com/jungminchoilab)
 - The Registry of Open Data on AWS entry
 
-> **TODO:** confirm the mailing list exists and publish its subscription link
-> here before launch. Confirm the laboratory's other announcement channels
-> before listing them.
+Controlled-tier applicants who have an active Data Use Agreement are notified
+directly when a release changes data they hold.
 
 ---
 
@@ -104,7 +104,7 @@ Each release and each erratum is announced through:
 
 Each release publishes, at minimum:
 
-- [ ] Sites-only VCF/BCF shards with `.tbi` and `.csi` indexes
+- [ ] Sites-only VCF shards with `.tbi` indexes
 - [ ] Parquet frequency tables
 - [ ] Hail Table, with the Hail version recorded
 - [ ] Callability and allele-number resources
