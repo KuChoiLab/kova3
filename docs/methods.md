@@ -9,7 +9,7 @@ per-sample gVCFs (4 cohorts)
   DRAGEN Iterative gVCF Genotyper  ──  joint genotyping on GRCh38
         │
         ▼
-  multi-sample callset  (internal only — not published)
+  multi-sample callset  (published in the controlled tier)
         │
         ├── duplicate removal
         ├── ancestry inference
@@ -19,16 +19,19 @@ per-sample gVCFs (4 cohorts)
         └── residual cohort-effect assessment
         │
         ▼
-  sites-only aggregate layer  ──  published
+  sites-only aggregate layer  ──  published in the open tier
         │
-        ├── sites-only VCF/BCF (chromosome-sharded)
+        ├── sites-only VCF (chromosome-sharded)
         ├── Parquet frequency tables
         ├── Hail Table
         └── callability / allele-number resources
 ```
 
-The multi-sample callset containing per-sample genotypes is an internal
-intermediate. Only the aggregate layer derived from it is published.
+The multi-sample callset carries per-sample genotype columns, so it is released
+in the controlled tier rather than openly. The sites-only aggregate layer is
+derived from it by dropping every genotype column and rewriting the file header;
+that conversion is what makes the open tier publishable without restriction. See
+[data-access.md](data-access.md) for how the controlled tier is obtained.
 
 ---
 
@@ -36,7 +39,7 @@ intermediate. Only the aggregate layer derived from it is published.
 
 All coordinates are on **GRCh38**.
 
-> **TODO:** state the exact reference used — FASTA filename, accession
+> **TODO:** state the exact reference used: FASTA filename, accession
 > (for example `GCA_000001405.15_GRCh38_no_alt_analysis_set`), whether ALT
 > contigs and decoys were included, and the contig naming convention
 > (`chr1` vs `1`). Users cannot correctly lift or intersect KOVA3 against
@@ -80,7 +83,7 @@ Harmonized joint calling **reduces** cross-cohort heterogeneity. It does not
 remove it. Differences in sequencing platform, library preparation, coverage
 depth, and alignment upstream of gVCF generation persist into the joint
 callset. These residual effects are assessed and reported rather than assumed
-away — see [batch-effect assessment](#residual-cohort-effect-assessment).
+away; see [batch-effect assessment](#residual-cohort-effect-assessment).
 
 ---
 
@@ -111,7 +114,7 @@ Records contributed by more than one cohort are identified and retained once.
 
 ### Sample quality control
 
-> **TODO:** list the sample-level QC metrics and thresholds applied — for
+> **TODO:** list the sample-level QC metrics and thresholds applied, for
 > example call rate, mean coverage, contamination estimate, chimera rate,
 > heterozygosity, and sex-check concordance. For each, give the threshold and
 > the number of samples excluded.
@@ -181,6 +184,6 @@ contributing cohorts.
 
 > **TODO:** publish the pipeline configuration, tool versions, and parameter
 > files sufficient for an external group to understand exactly how the
-> published frequencies were produced. Where the pipeline cannot be rerun
-> externally because it depends on participant-level inputs, say so and
-> provide the configuration anyway.
+> published frequencies were produced. Approved controlled-tier applicants hold
+> the participant-level inputs and can therefore rerun the pipeline end to end;
+> publish the configuration in a form that supports that.

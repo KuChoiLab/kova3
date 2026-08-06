@@ -37,7 +37,7 @@ describe how samples were collected, not where the people are from. A stratum
 labelled by cohort of origin invites users to read it as an ancestry group,
 which it is not.
 
-A third stratum for the complement of Jeju — mainland samples — is not
+A third stratum for the complement of Jeju, meaning mainland samples, is not
 published, because it is exactly derivable from the two that are:
 `GAC − KOVA3_AC_jeju` over `GAN − KOVA3_AN_jeju`. Publishing it would add no
 information and one more chance for the three figures to disagree.
@@ -52,12 +52,12 @@ because a clustering algorithm assigned it there. Samples with Jeju ancestry
 that were collected through another cohort are not in the stratum, and any
 sample in the Jeju cohort without Jeju ancestry is.
 
-This is a deliberately conservative definition — it is reproducible and it makes
+This is a deliberately conservative definition. It is reproducible and it makes
 no claim the data cannot support. It also means the stratum should not be
 treated as an ancestry label.
 
 > **TODO:** report the observed differentiation between the Jeju stratum and the
-> rest of the cohort in each release — a summary statistic and a plot — so users
+> rest of the cohort in each release, as a summary statistic and a plot, so users
 > can see whether stratifying makes a practical difference for their variants.
 > If it turns out not to, say so plainly rather than leaving users to assume it
 > matters.
@@ -71,7 +71,7 @@ treated as an ancestry label.
 > cohort of 11,008, so stratified estimates are noisier than whole-cohort ones
 > at low frequencies, and per-stratum counts at singleton variants are the
 > smallest cells the release will publish. State the threshold applied, if any,
-> and what users see below it — omitted fields, or fields present but missing.
+> and what users see below it: omitted fields, or fields present but missing.
 
 ---
 
@@ -83,14 +83,14 @@ published, and only in aggregate.
 
 > **TODO:** if sex-stratified allele numbers are needed for correct
 > interpretation of the sex chromosomes, document that in
-> [data-dictionary.md](data-dictionary.md) — it is a ploidy question, not a
+> [data-dictionary.md](data-dictionary.md); it is a ploidy question, not a
 > subpopulation question.
 
 ---
 
 ## Guidance for users
 
-**Use the `all` stratum** — `GAF` with `GAN` — unless you have a specific reason
+**Use the `all` stratum**, `GAF` with `GAN`, unless you have a specific reason
 to restrict to Jeju. For clinical variant filtering in Korean patients,
 the whole-cohort frequency is the right number in almost every case.
 

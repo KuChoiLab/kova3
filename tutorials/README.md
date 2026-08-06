@@ -17,6 +17,10 @@ the pinned KOVA3 release version.
 | 2 | Annotating a patient VCF | Add Korean allele frequencies to your own VCF and filter by frequency |
 | 3 | Querying with Athena | Look up a variant list or gene panel against the Parquet frequency layer |
 | 4 | Genome-wide analysis in Hail | Load the prebuilt Hail Table and run analysis on Amazon EMR |
+| 5 | Working with the controlled tier | Apply for access, then stream a locus from CRAM with `samtools` where CRAM exists, and align FASTQ in-region otherwise |
+
+Notebooks 1 to 4 use the open tier and need no credentials. Notebook 5 requires
+an approved application; see [docs/data-access.md](../docs/data-access.md).
 
 ## Community challenge
 

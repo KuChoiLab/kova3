@@ -6,7 +6,7 @@ and semantics match across all three; see
 
 | Representation | Best for |
 |---|---|
-| Sites-only VCF/BCF | Interval queries with existing genomics tooling |
+| Sites-only VCF | Interval queries with existing genomics tooling |
 | Apache Parquet | SQL queries over the whole callset (Athena, Spark, Glow) |
 | Hail Table | Genome-wide analysis in Hail without an import step |
 
@@ -37,7 +37,7 @@ to a gene reads only the blocks overlapping it. Combined with column pruning,
 a gene-panel lookup touches a small fraction of the dataset.
 
 > **TODO:** state the `position_bin` width (for example 10 Mb) and confirm the
-> resulting partition count is reasonable — too many small partitions degrades
+> resulting partition count is reasonable. Too many small partitions degrade
 > Athena performance. Also confirm target Parquet row-group and file sizes.
 
 ### Columns
@@ -76,7 +76,7 @@ aligned with the sites-only VCF. See
 | `kova3_homalt_jeju` | INT32 | yes | Homozygous alternate individuals, Jeju stratum |
 
 Quality-control columns are nullable because DRAGEN omits these fields at sites
-where they cannot be computed — a null means not calculable, not zero.
+where they cannot be computed. A null means not calculable, not zero.
 
 > **TODO:** add the allelic-balance columns (`gabhom`, `gabhet`, `gabhetp`) if
 > allelic depth was imported during aggregation, and decide whether the
@@ -163,7 +163,7 @@ Key: ['locus', 'alleles']
 import hail as hl
 
 # The table is prebuilt and partitioned; no import step is required.
-kova3 = hl.read_table("s3://<BUCKET>/data/release=<RELEASE>/hail/kova3.sites.ht")
+kova3 = hl.read_table("s3://<OPEN_BUCKET>/data/release=<RELEASE>/hail/kova3.sites.ht")
 
 # Annotate your own dataset with Korean allele frequencies.
 mt = mt.annotate_rows(kova3=kova3[mt.row_key].info)

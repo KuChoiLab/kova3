@@ -13,11 +13,28 @@ independently generated sources.
 | Korea10K | KOGIC | 1,613 | Additional production within the Korea10K project |
 | **Total** | | **11,008** | Before cross-cohort deduplication |
 
+### Read-level data held per cohort
+
+Read-level format is not uniform. It varies by cohort and, within Korea4K, by
+sample. This determines what a controlled-tier applicant receives.
+
+| Cohort | Records | FASTQ | CRAM | Notes |
+|---|---:|---|---|---|
+| National Integrated Bio-Big Data (KOBIC) | 4,739 | | Yes | |
+| Jeju Genome | 2,993 | | Yes | |
+| Korea4K | 1,663 | Mixed | Mixed | 1,005 samples FASTQ only, 637 CRAM only, 21 both |
+| Korea10K | 1,613 | Yes | | No CRAM exists for this cohort |
+
+Per-sample gVCF exists for every cohort. The genotyped multi-sample VCF covers
+all 11,008 records. A per-sample manifest published with the controlled tier
+states exactly which formats exist for each sample; see
+[file-tree.md](file-tree.md).
+
 The count above is the number of **records contributed**, not the final number
 of unique unrelated individuals. Deduplication and relatedness assessment are
 performed as part of the pipeline; see [methods.md](methods.md).
 
-> **TODO — blocking before launch.** Report the exact figures once the callset
+> **TODO, blocking before launch.** Report the exact figures once the callset
 > is produced:
 >
 > - unique individuals after cross-cohort deduplication
@@ -43,7 +60,7 @@ per-cohort ascertainment before assuming that cases of that disease are absent.
 | Korea4K | *TODO* | *TODO* | *TODO* |
 | Korea10K | *TODO* | *TODO* | *TODO* |
 
-> **TODO — complete before launch.** Fill the table above from each cohort's
+> **TODO, complete before launch.** Fill the table above from each cohort's
 > study protocol. State explicitly where ascertainment differs between cohorts.
 > Do **not** label any cohort a "healthy control" set unless that is supported by
 > that cohort's own protocol. This affects how users interpret allele
@@ -113,6 +130,8 @@ Published alongside the callset, at cohort level only:
 > each cohort, and confirm that publishing per-cohort sample counts and
 > coverage statistics is permitted under each data provision agreement.
 
-No participant-level metadata — age, sex at individual resolution, phenotype,
-recruitment site, or any field that could contribute to re-identification — is
-published.
+No participant-level metadata is published in the open tier: not age, not sex at
+individual resolution, not phenotype, not recruitment site, and no other field
+that could contribute to re-identification. Controlled-tier recipients receive
+only the metadata their approved protocol requires, under the terms of the Data
+Use Agreement.

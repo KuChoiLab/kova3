@@ -1,6 +1,8 @@
-# KOVA3 — Korean Variant Archive 3
+# KOVA3: Korean Variant Archive 3
 
-Documentation for the KOVA3 population-level allele-frequency resource.
+Documentation for KOVA3, a population-scale Korean genome resource released in
+two tiers: an openly licensed allele-frequency layer, and a controlled-access
+layer holding the participant-level sequencing data.
 
 > **Status: pre-release.** KOVA3 has not yet been published. This repository
 > documents the planned structure and content of the release. Sections marked
@@ -14,11 +16,13 @@ Documentation for the KOVA3 population-level allele-frequency resource.
 
 ### What KOVA3 is
 
-KOVA3 is an openly licensed, **population-level allele-frequency resource**
-derived from whole-genome sequencing of approximately 11,008 Korean cohort
-records. It reports, for each variant site, how often the alternate allele is
-observed in this Korean cohort — together with the information needed to
-interpret that number responsibly.
+KOVA3 is a Korean genome resource derived from whole-genome sequencing of
+11,008 cohort records. Its **open tier** is an openly licensed, population-level
+allele-frequency callset: for each variant site it reports how often the
+alternate allele is observed in this Korean cohort, together with the
+information needed to interpret that number responsibly. Its **controlled
+tier** holds the participant-level sequencing data behind that callset, for
+researchers whose work cannot be done from frequencies alone.
 
 The resource exists because Koreans are underrepresented in the frequency
 references used in routine clinical variant interpretation. Broad "East Asian"
@@ -31,12 +35,12 @@ burden for Korean patients.
 
 | Layer | Contents |
 |---|---|
-| Sites-only callset | Chromosome-sharded VCF/BCF, bgzip-compressed, with tabix/CSI indexes |
+| Sites-only callset | Chromosome-sharded VCF, bgzip-compressed, with tabix indexes |
 | Frequency tables | Apache Parquet, partitioned by chromosome and position bin |
 | Hail Table | Prebuilt, for genome-wide analysis without an import step |
 | Callability resources | Per-site call rate and allele-number tracks |
 | Aggregate metadata | Cohort-level descriptions in TSV/Parquet |
-| Documentation | This repository, plus JSON/YAML schemas and release manifests |
+| Documentation | This repository, plus JSON schemas and release manifests |
 
 Per-site fields include cohort allele count (`GAC`), allele number (`GAN`),
 allele frequency (`GAF`), homozygote count, call rate, Hardy-Weinberg and
@@ -44,26 +48,40 @@ allelic-balance statistics, and quality filters. Fields are published under the
 names DRAGEN emits, with a `G` prefix marking cohort-wide values. See the
 [data dictionary](docs/data-dictionary.md).
 
-### What is **not** released
+### The controlled tier
 
-KOVA3 publishes **no participant-level data**. The following are excluded from
-the public release and retained under internal or controlled access:
+Everything above is the **open tier**. The participant-level data behind it are
+released as a **controlled tier**: FASTQ, CRAM, per-sample gVCF, and the
+genotyped multi-sample VCF, for the same cohort.
 
-- FASTQ files
-- CRAM/BAM alignments
-- Per-sample gVCFs
-- Per-sample genotype calls
-- Phased haplotypes
-- Fine-grained participant metadata
+The two tiers differ in how you get them, not in whether they are available:
 
-This boundary is deliberate. Individual genotypes are re-identifiable, and the
-contributing cohorts were not consented for unrestricted public release of
-participant-level data. Aggregate site-level statistics can be shared openly;
-participant-level data cannot.
+| | Open tier | Controlled tier |
+|---|---|---|
+| Contents | Site-level allele frequencies and supporting resources | Participant-level reads, per-sample gVCF, multi-sample VCF |
+| Licence | CC BY 4.0 | KOVA3 Data Use Agreement |
+| How to get it | Download or stream directly; no registration | Apply; see [docs/data-access.md](docs/data-access.md) |
+| Cost | None | None |
+| Eligibility | Anyone | Academic researchers, non-commercial research |
 
-> **Consequence for users:** analyses that intrinsically require individual
-> haplotypes — imputation reference panel construction, phasing,
-> haplotype-based demographic inference — cannot be performed with KOVA3.
+The split is a privacy boundary, not a paywall. Individual genotypes are
+re-identifiable, and the contributing cohorts were not consented for
+unrestricted public release of participant-level data. Aggregate site-level
+statistics can be shared openly; participant-level data are shared under an
+agreement that binds the recipient.
+
+Fine-grained participant metadata are not released in either tier. Aggregate
+cohort descriptions are published with the open tier; see
+[docs/cohorts.md](docs/cohorts.md).
+
+> **Which tier do you need?** Analyses that depend on how alleles co-occur
+> within individuals, such as phasing, linkage disequilibrium, imputation
+> reference panel construction, relatedness and population-structure work, and
+> genotype-phenotype association, require the controlled tier. So do methods
+> that need read-level evidence, such as structural-variant and short-tandem-repeat
+> calling. Frequency filtering, ACMG/AMP population-frequency evidence, carrier
+> frequency estimation, and pharmacogenomic allele frequencies are served by the
+> open tier alone.
 
 ### Reference build
 
@@ -74,7 +92,7 @@ reference FASTA and accession.
 
 ## Quick start
 
-> **TODO:** replace `<BUCKET>` and `<RELEASE>` with the published S3 bucket
+> **TODO:** replace `<OPEN_BUCKET>` and `<RELEASE>` with the published S3 bucket
 > name and release tag once the dataset is live on the Registry of Open Data.
 
 Query a gene interval without downloading anything:
@@ -84,7 +102,7 @@ Query a gene interval without downloading anything:
 # requested region are transferred, not the whole file.
 bcftools view \
   -r chr17:43044295-43125364 \
-  https://<BUCKET>.s3.amazonaws.com/data/release=<RELEASE>/sites_vcf/kova3.chr17.sites.vcf.gz
+  https://<OPEN_BUCKET>.s3.amazonaws.com/data/release=<RELEASE>/sites_vcf/kova3.chr17.sites.vcf.gz
 ```
 
 Annotate your own VCF with Korean allele frequencies:
@@ -93,7 +111,7 @@ Annotate your own VCF with Korean allele frequencies:
 # Add KOVA3 cohort allele counts and frequencies to an existing patient VCF.
 # The G prefix means cohort-wide; see docs/data-dictionary.md.
 bcftools annotate \
-  -a https://<BUCKET>.s3.amazonaws.com/data/release=<RELEASE>/sites_vcf/kova3.chr17.sites.vcf.gz \
+  -a https://<OPEN_BUCKET>.s3.amazonaws.com/data/release=<RELEASE>/sites_vcf/kova3.chr17.sites.vcf.gz \
   -c INFO/GAC,INFO/GAN,INFO/GAF,INFO/KOVA3_HOMALT \
   -O z -o patient.kova3.vcf.gz \
   patient.vcf.gz
@@ -104,7 +122,7 @@ Load the Hail Table:
 ```python
 import hail as hl
 # No import step needed; the table is prebuilt and partitioned.
-ht = hl.read_table("s3://<BUCKET>/data/release=<RELEASE>/hail/kova3.sites.ht")
+ht = hl.read_table("s3://<OPEN_BUCKET>/data/release=<RELEASE>/hail/kova3.sites.ht")
 ht.describe()
 ```
 
@@ -135,9 +153,13 @@ layer, live in [`tutorials/`](tutorials/).
 
 ## Licence
 
-KOVA3 data are released under
+The open tier, this documentation, the schemas, and the tutorial notebooks are
+released under
 [Creative Commons Attribution 4.0 International (CC BY 4.0)](LICENSE).
-This documentation is released under the same licence.
+
+The controlled tier is released under the KOVA3 Data Use Agreement, at no cost,
+to academic researchers for non-commercial research. See
+[docs/data-access.md](docs/data-access.md).
 
 See [docs/data-owners.md](docs/data-owners.md) for attribution requirements and
 data ownership.
@@ -147,7 +169,7 @@ data ownership.
 ## Support
 
 - **Questions and bug reports:** open an issue in this repository
-- **Contact:** Jungmin Choi, Korea University College of Medicine —
+- **Contact:** Jungmin Choi, Korea University College of Medicine,
   <jungminchoi@korea.ac.kr>
 - **Release announcements:** watch this repository, or see
   [docs/versioning.md](docs/versioning.md) for the announcement channels
