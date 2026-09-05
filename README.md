@@ -76,8 +76,8 @@ cohort descriptions are published with the open tier; see
 
 > **Which tier do you need?** Analyses that depend on how alleles co-occur
 > within individuals, such as phasing, linkage disequilibrium, imputation
-> reference panel construction, relatedness and population-structure work, and
-> genotype-phenotype association, require the controlled tier. So do methods
+> reference panel construction, and relatedness and population-structure work,
+> require the controlled tier. So do methods
 > that need read-level evidence, such as structural-variant and short-tandem-repeat
 > calling. Frequency filtering, ACMG/AMP population-frequency evidence, carrier
 > frequency estimation, and pharmacogenomic allele frequencies are served by the
