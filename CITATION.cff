@@ -1,0 +1,39 @@
+cff-version: 1.2.0
+message: "If you use KOVA3, please cite the resource and state the release version used."
+title: "Korean Variant Archive 3 (KOVA3)"
+abstract: >-
+  KOVA3 is an openly licensed, population-level allele-frequency resource for the
+  Korean population, published as an aggregate sites-only layer (allele counts,
+  allele numbers, allele frequencies, homozygote counts, call rates, filters, and
+  callability) derived from a uniformly joint-genotyped whole-genome callset.
+type: dataset
+version: "TODO"          # e.g. v3.0.0 — set at first release
+date-released: "TODO"    # YYYY-MM-DD — set at first release
+license: CC-BY-4.0
+url: "https://github.com/KuChoiLab/kova3"
+# TODO: add the Registry of Open Data on AWS landing-page URL and a dataset DOI
+#       (e.g. a Zenodo deposit) once the first versioned release is published.
+authors:
+  - name: "Choi Laboratory, Korea University College of Medicine"
+    website: "https://choi.korea.ac.kr/"
+contact:
+  - name: "Jungmin Choi"
+    affiliation: "Korea University College of Medicine"
+    email: "jungminchoi@korea.ac.kr"
+references:
+  - type: article
+    title: "The Korean Variant Archive (KOVA): a reference database of genetic variations in the Korean population"
+    year: 2017
+    journal: "Scientific Reports"
+    doi: "10.1038/s41598-017-04642-4"
+    notes: "Author list, volume, and article number: see the publisher record at doi:10.1038/s41598-017-04642-4."
+    authors:
+      - name: "See publisher record at doi:10.1038/s41598-017-04642-4"
+  - type: article
+    title: "A database of 5305 healthy Korean individuals reveals genetic and clinical implications for an East Asian population"
+    year: 2022
+    journal: "Experimental & Molecular Medicine"
+    doi: "10.1038/s12276-022-00871-4"
+    notes: "KOVA2. Author list, volume, and pages: see the publisher record at doi:10.1038/s12276-022-00871-4."
+    authors:
+      - name: "See publisher record at doi:10.1038/s12276-022-00871-4"
