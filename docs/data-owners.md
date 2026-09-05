@@ -100,9 +100,9 @@ data. Controlled-tier release requires a separate, equally explicit determinatio
 from each contributing institution; see the second table below.
 ² CC BY 4.0 permits commercial reuse. A cohort whose consent or governing
 agreement forbids commercial reuse cannot be released under CC BY 4.0 and must
-be excluded (or released, if authorized, under a separately negotiated licence,
-which the AWS Open Data Sponsorship Program does not accommodate, as it requires
-a permissive, no-cost licence).
+be excluded from the open tier (its participant-level data may still be provided
+through the controlled-access tier, which the AWS Open Data Sponsorship Program
+accommodates under a no-cost data-use agreement).
 ³ If an institution requires named acknowledgement, record the exact required
 wording in [CITATION.md](../CITATION.md#acknowledging-the-contributing-cohorts).
 

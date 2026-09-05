@@ -13,7 +13,7 @@ the pinned KOVA3 release version.
 
 | # | Notebook | Covers |
 |---|---|---|
-| 1 | Streaming an interval | Fetch a gene region from the sites-only callset on Amazon S3 with `bcftools`, without downloading the file |
+| 1 | [Streaming an interval](01_stream_interval_bcftools.ipynb) | Fetch a gene region from the sites-only callset on Amazon S3 with `bcftools`, without downloading the file |
 | 2 | Annotating a patient VCF | Add Korean allele frequencies to your own VCF and filter by frequency |
 | 3 | Querying with Athena | Look up a variant list or gene panel against the Parquet frequency layer |
 | 4 | Genome-wide analysis in Hail | Load the prebuilt Hail Table and run analysis on Amazon EMR |
