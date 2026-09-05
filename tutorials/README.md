@@ -26,6 +26,3 @@ an approved application; see [docs/data-access.md](../docs/data-access.md).
 
 Compare a candidate variant list for a Korean rare disease case before and after
 filtering on KOVA3 frequencies, and report how the candidate count changes.
-
-> **TODO:** publish the notebooks before launch. This is a required onboarding
-> deliverable for the AWS Open Data Sponsorship Program, not an optional extra.

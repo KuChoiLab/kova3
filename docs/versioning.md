@@ -49,9 +49,11 @@ available so that prior analyses can be reproduced and re-examined.
 Superseded releases are marked as such in [CHANGELOG.md](../CHANGELOG.md) and
 in their own `manifest.json`, with a pointer to the release that replaces them.
 
-> **TODO:** decide and document a retention period for superseded releases,
-> and whether very old releases are eventually removed. If they are, say how
-> much notice users receive.
+Superseded releases are retained for the life of the resource. This applies to
+both tiers: open-tier releases and, in the controlled-access tier, previous
+genotyped multi-sample VCFs. No removal of superseded releases is scheduled;
+should that ever change, users will receive at least twelve months' notice
+through the announcement channels below.
 
 ---
 
@@ -126,4 +128,4 @@ See [CHANGELOG.md](../CHANGELOG.md).
 
 | Release | Date | Records | Notes |
 |---|---|---:|---|
-| `v3.0.0` | TODO | 11,008 | Initial KOVA3 release. Not yet published |
+| `v3.0.0` | not yet published | 11,008 | Initial KOVA3 release |
