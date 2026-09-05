@@ -15,8 +15,8 @@ individual genotypes or sequence reads.
 
 Analyses that genuinely require the controlled tier include haplotype phasing
 and linkage disequilibrium, imputation reference panel construction,
-relatedness and fine-scale population structure, genotype-phenotype
-association, and variant-caller or structural-variant method development that
+relatedness and fine-scale population structure,
+and variant-caller or structural-variant method development that
 needs read-level evidence.
 
 ---
