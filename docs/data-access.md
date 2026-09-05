@@ -4,7 +4,7 @@ KOVA3 is released in two tiers.
 
 | Tier | Contents | How to get it |
 |---|---|---|
-| **Open** | Allele-frequency callset. Sites-only VCF/BCF, Parquet, Hail Table, callability resources, aggregate cohort metadata. No participant-level genotypes. | Download directly. No registration, no agreement, no approval. See the [README](../README.md). |
+| **Open** | Allele-frequency callset. Sites-only VCF, Parquet, Hail Table, callability resources, aggregate cohort metadata. No participant-level genotypes. | Download directly. No registration, no agreement, no approval. See the [README](../README.md). |
 | **Controlled** | Participant-level data: FASTQ, CRAM, per-sample gVCF, and the genotyped multi-sample VCF. | Apply as described on this page. |
 
 **Most users need only the open tier.** If your work is variant frequency
@@ -106,9 +106,9 @@ The agreement's substantive obligations are these.
   request. Access may be revoked for breach, and the applicant's institution
   will be notified.
 
-> **TODO before launch:** publish the executable Data Use Agreement as a PDF at
-> a stable URL and link it here. This section summarises its terms; the signed
-> document governs.
+The full Data Use Agreement text will be published on this page before the first
+controlled-access release. This section summarises its terms; the signed document
+governs.
 
 ---
 
@@ -130,12 +130,8 @@ Please use the subject line `KOVA3 controlled-tier access request`.
 | Review decision | 8 weeks from a complete application |
 | Credentials issued after the Data Use Agreement is countersigned | 2 weeks from decision |
 
-Applications are reviewed against the criteria on this page. If an application
+Applications are reviewed by the principal investigator on behalf of the KOVA3 data access team, against the criteria on this page. If an application
 is declined you will be told the reason, and you may revise and reapply.
-
-> **TODO before launch:** confirm these intervals are ones the laboratory can
-> actually meet, and revise them if not. A published interval that is not met
-> is worse than a longer one that is.
 
 ---
 
@@ -154,7 +150,7 @@ necessary for most analyses nor practical.
 Read-level format varies by cohort and by sample. Some samples have CRAM, some
 have FASTQ, and some have both. A per-sample manifest published with the
 release states which formats exist for each sample; consult it when planning an
-analysis. CRAM files carry CRAI indexes and support streaming a single locus.
+analysis. Where CRAM is aligned, CRAI indexes allow streaming a single locus.
 
 ---
 
