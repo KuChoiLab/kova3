@@ -145,6 +145,17 @@ ht = hl.read_table("s3://kova3-open/data/release=v3.0.0/hail/kova3.sites.ht")
 ht.describe()
 ```
 
+Three things this snippet needs that the others do not. Hail runs on a
+supported JDK, not whatever Java happens to be installed; each release records
+the Hail version its table was written with, and that version is the minimum
+required to read it (see
+[docs/schemas.md](docs/schemas.md#hail-version)). And reading `s3://` goes
+through Hail's own S3 client, which follows the AWS credential chain: unlike
+the `bcftools` and Athena routes above, it may need AWS credentials configured
+even though the bucket itself is public. If it does not resolve, read the same
+callset from the sites-only VCF or the Parquet layer instead, both of which
+Hail imports directly.
+
 Worked examples live in [`tutorials/`](tutorials/): streaming an interval,
 annotating your own VCF, and querying a gene panel with Amazon Athena against
 the Parquet layer.
