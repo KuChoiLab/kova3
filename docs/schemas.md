@@ -36,9 +36,26 @@ parquet/
 to a gene reads only the blocks overlapping it. Combined with column pruning,
 a gene-panel lookup touches a small fraction of the dataset.
 
-> **TODO:** state the `position_bin` width (for example 10 Mb) and confirm the
-> resulting partition count is reasonable. Too many small partitions degrade
-> Athena performance. Also confirm target Parquet row-group and file sizes.
+`position_bin` is **10 Mb wide**: `position_bin = floor(POS / 10_000_000)`,
+written zero-padded to three digits. The longest contig, `chr1`, therefore ends
+at `position_bin=024`, and the whole genome comes to roughly 310 partitions.
+
+| Property | Value |
+|---|---|
+| Bin width | 10 Mb |
+| Partition key format | `position_bin=NNN`, zero-padded to 3 digits |
+| Partitions, whole genome | about 310 |
+| Rows per partition | roughly 300,000 to 400,000 |
+| Target file size | 20 to 40 MB |
+| Parquet row group | 64 MB |
+| Compression | ZSTD |
+
+The width is a compromise between two access patterns. A single gene is under
+2 Mb, so a gene query reads one partition or two; a wider bin would make it
+scan tens of megabytes for one locus. A narrower bin would push the partition
+count and the per-file overhead up without helping, since Athena already prunes
+to the bins it needs. ZSTD is read by Athena, Spark, Hail, polars, pyarrow and
+DuckDB, and is about a quarter smaller than Snappy on this data.
 
 ### Columns
 
@@ -107,8 +124,59 @@ FROM kova3.sites_v3_0_0
 WHERE variant_id IN ('chr17-43093464-A-G', 'chr13-32340301-G-A');
 ```
 
-> **TODO:** publish the Athena `CREATE EXTERNAL TABLE` statement, or an AWS
-> Glue crawler configuration, so users can register the table in one step.
+### Registering the table
+
+The statement below is published at
+`metadata/schemas/athena_create_table.sql` in the release bucket. It uses
+**partition projection**, so there is no Glue crawler to run and no
+`MSCK REPAIR TABLE` after a release: Athena derives the partition paths from
+the rules in `TBLPROPERTIES`. Run it once in your own AWS account. The table
+definition and the query charges stay in your account; the data stays in the
+public bucket.
+
+```sql
+CREATE EXTERNAL TABLE IF NOT EXISTS kova3.sites_v3_0_0 (
+  pos          int,
+  ref          string,
+  alt          string,
+  variant_id   string,
+  rsid         string,
+  qual         float,
+  filter       array<string>,
+  ac           int,
+  an           int,
+  af           double,
+  ns           int,
+  ns_gt        int,
+  ns_nogt      int,
+  ns_nodata    int,
+  nhomalt      int,
+  call_rate    float,
+  ic           float,
+  hwec2        float,
+  hwe          float,
+  exchet       float,
+  ac_jeju      int,
+  an_jeju      int,
+  af_jeju      double,
+  nhomalt_jeju int
+)
+PARTITIONED BY (chromosome string, position_bin int)
+STORED AS PARQUET
+LOCATION 's3://kova3-open/data/release=v3.0.0/parquet/'
+TBLPROPERTIES (
+  'projection.enabled'             = 'true',
+  'projection.chromosome.type'     = 'enum',
+  'projection.chromosome.values'   = 'chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM',
+  'projection.position_bin.type'   = 'integer',
+  'projection.position_bin.range'  = '0,24',
+  'projection.position_bin.digits' = '3',
+  'storage.location.template'      = 's3://kova3-open/data/release=v3.0.0/parquet/chromosome=${chromosome}/position_bin=${position_bin}/'
+);
+```
+
+Each release publishes its own statement with the release tag substituted, so
+two releases can be registered side by side as separate tables.
 
 ---
 
@@ -184,9 +252,20 @@ the autosomes, so the threshold above corresponds to a call rate of roughly
 0.68; choose your own according to how much power your analysis needs. See
 [data-dictionary.md](data-dictionary.md#core-frequency-fields).
 
-> **TODO:** record the Hail version the table was written with. Hail Table
-> format compatibility is version-sensitive, and users need to know the
-> minimum version required to read it.
+### Hail version
+
+The Hail Table on-disk format is version-sensitive, and a table written by a
+newer Hail is not guaranteed to be readable by an older one. Each release
+therefore records the exact Hail version it was written with in three places:
+the `hail_version` global field of the table itself, the `pipeline` block of
+`manifest.json`, and this document. That version is the **minimum** required to
+read the table.
+
+Users on an older Hail, or not using Hail at all, lose nothing: the same
+callset is published as a sites-only VCF and as Parquet, both of which Hail
+can import directly.
+
+> **TODO:** fill in the version at first release.
 
 ---
 

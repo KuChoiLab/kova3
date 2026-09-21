@@ -50,7 +50,8 @@ in [CHANGELOG.md](CHANGELOG.md).
 Per-site fields include cohort allele count (`AC`), allele number (`AN`),
 allele frequency (`AF`), homozygote count (`nhomalt`), call rate
 (`call_rate`), inbreeding coefficient, Hardy-Weinberg and excess-heterozygosity
-statistics, and quality filters. The frequency fields use the names standard across population
+statistics, and quality filters. No allele-count threshold is applied, so
+singletons are published. The frequency fields use the names standard across population
 frequency resources, so a pipeline written against gnomAD reads a KOVA3 file
 unchanged. See the [data dictionary](docs/data-dictionary.md) for the full
 field list and for how these map onto the joint genotyping output.

@@ -33,7 +33,7 @@ s3://kova3-open/
 │   └── schemas/
 │       ├── parquet_schema.json
 │       ├── hail_schema.json
-│       ├── athena_create_table.sql    # CREATE EXTERNAL TABLE over the Parquet layer
+│       ├── athena_create_table.sql    # CREATE EXTERNAL TABLE, partition projection
 │       └── vcf_header.txt
 │
 └── data/
@@ -55,14 +55,21 @@ s3://kova3-open/
         │   └── kova3.sites.ht/
         │
         └── callability/
-            ├── kova3.allele_number.chr1.<ext>
-            └── kova3.call_rate.chr1.<ext>
+            ├── bed/
+            │   ├── kova3.allele_number.chr1.bed.gz
+            │   └── kova3.allele_number.chr1.bed.gz.tbi
+            └── parquet/
+                └── chromosome=chr1/
+                    └── part-00000.parquet
 ```
 
-> **TODO:** settle the callability file format and extension;
-> see [methods.md](methods.md#callability). chrM is within the run's contig
-> list (see [methods.md](methods.md#reference-genome)), but confirm the shard
-> is non-empty before publishing it rather than shipping an empty file.
+The callability layer is a run-length-encoded allele-number track as
+bgzip-compressed BED with a tabix index, plus a 1 kb binned Parquet summary;
+see [methods.md](methods.md#callability).
+
+> **TODO:** chrM is within the run's contig list (see
+> [methods.md](methods.md#reference-genome)), but confirm the shard is
+> non-empty before publishing it rather than shipping an empty file.
 
 ---
 

@@ -170,12 +170,14 @@ Records contributed by more than one cohort are identified and retained once.
 >   and parameters
 > - the variant classes included (SNVs and short indels) and any size limit on
 >   indels
-> - whether any small-cell suppression is applied to singleton or very rare
->   variants
 >
 > Every filter that changes what a user sees must be documented here, because
 > a variant absent from KOVA3 is otherwise indistinguishable from a variant
 > that was filtered out.
+
+**No small-cell suppression is applied.** Singleton and very rare variants are
+published with their counts; see
+[data-owners.md](data-owners.md#no-small-cell-suppression) for the reasoning.
 
 ---
 
@@ -185,13 +187,30 @@ A frequency of zero can mean "not observed in Koreans" or "not callable in this
 region". KOVA3 publishes callability resources so users can tell the
 difference.
 
-Per-site allele number (`AN`) is published for every site in the callset. In
-addition, genome-wide allele-number and call-rate tracks are published so that
-regions absent from the callset can still be assessed.
+Per-site allele number (`AN`) is published for every site in the callset. That
+covers sites the callset contains. It says nothing about the regions where the
+callset has no record at all, and those are exactly the regions where a user is
+most likely to mistake silence for absence. Two genome-wide resources fill that
+gap, published under `callability/` in each release.
 
-> **TODO:** specify the format of the genome-wide callability resource
-> (per-base BigWig, interval BED, or binned Parquet), the resolution, and how
-> users should interpret it alongside `AN`.
+| Resource | Format | Resolution | Use it for |
+|---|---|---|---|
+| Allele-number track | BED, bgzip-compressed with a tabix index | Exact. Run-length encoded, so each interval is a maximal run of constant `AN` | Streaming one region and asking "was this locus callable at all". Same access pattern as the sites-only VCF, and readable by `bedtools`, `pybedtools` and IGV |
+| Callability summary | Apache Parquet, partitioned like the frequency layer | 1 kb bins: `chromosome`, `position_bin`, `start`, `end`, `mean_an`, `median_an`, `call_rate` | Genome-wide and panel-wide work. Joins directly against the frequency tables in Athena, Spark or polars |
+
+The BED track is the authoritative one: it is exact, with no binning. The
+Parquet summary is a convenience for aggregate queries, where 3.1 million 1 kb
+rows are far easier to work with than the full run-length encoding.
+
+A per-base BigWig is deliberately **not** published. It needs a special writer,
+is awkward to join against tabular data, and adds nothing the two resources
+above do not already provide.
+
+**How to read them alongside `AF`.** A variant absent from KOVA3 is evidence of
+rarity only where the allele number at that position is high. Before treating
+an absence as informative, look the position up in the callability track: a
+region with low or zero `AN` was not assessed, and no conclusion about Korean
+frequency follows from it.
 
 ---
 

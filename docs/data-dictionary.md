@@ -106,8 +106,22 @@ Source: [DRAGEN documentation, population genotyping](https://help.dragen.illumi
 | `QUAL` | Site quality. iGG reports the maximum input QUAL across the cohort at this site |
 | `FILTER` | Filter status; see [FILTER values](#filter-values) |
 
-> **TODO:** confirm whether dbSNP rsIDs are assigned in `ID`, and if so, state
-> the dbSNP build used.
+**`ID` is not populated.** Every record carries `.`. dbSNP rsIDs are tied to a
+dbSNP build, so embedding them would date each release against a moving
+external resource and add a provenance question KOVA3 does not need to answer.
+The stable key KOVA3 publishes instead is `variant_id`
+(`chrom-pos-ref-alt`), which is self-contained and does not change between
+releases. If you want rsIDs, add them yourself against whichever build your
+pipeline already pins:
+
+```bash
+bcftools annotate -a dbSNP.vcf.gz -c ID \
+  kova3.chr1.sites.vcf.gz -Oz -o kova3.chr1.sites.rsid.vcf.gz
+```
+
+Should a later release populate `ID`, that is an added field rather than a
+changed one, so it would be a minor release under
+[versioning.md](versioning.md).
 
 ---
 
@@ -140,13 +154,27 @@ sample contributes no genotype: the site was covered but not confidently
 genotyped, or it had no coverage at all. Users assessing whether a region is
 interpretable should look at both.
 
-**Chromosome X and Y.** Allele numbers on the sex chromosomes reflect ploidy, so
-`AN` in non-pseudoautosomal regions is not simply twice the sample count.
+**Chromosome X, Y and M.** Allele numbers on the sex chromosomes reflect
+ploidy, so `AN` in non-pseudoautosomal regions is not simply twice the sample
+count. `AF` is computed against these sex-aware denominators, not against a
+fixed one.
 
-> **TODO:** document the ploidy model used for chrX, chrY, and the
-> pseudoautosomal regions, state whether `--gg-diploidify` was applied, and
-> confirm whether `AF` on the sex chromosomes is computed against a sex-aware
-> denominator.
+| Region | Ploidy | `AN` |
+|---|---|---|
+| chrX, pseudoautosomal | Diploid for all samples | `2 x N_called` |
+| chrX, non-pseudoautosomal | Diploid in XX, haploid in XY | `2 x N_XX_called + N_XY_called` |
+| chrY, non-pseudoautosomal | Haploid, XY only | `N_XY_called`. XX samples are excluded from the denominator |
+| chrY, pseudoautosomal | Not reported | Masked. Pseudoautosomal variants are reported once, on chrX |
+| chrM | Haploid | `N_called`. Heteroplasmy fractions are not published |
+
+**Sex-stratified frequencies are not published.** There are no `AC_XX` or
+`AN_XY` fields. What a clinical filter needs on the sex chromosomes is a
+correct denominator, which the model above provides, rather than a second set
+of stratified counts.
+
+> **TODO:** confirm this model against the produced callset. `--gg-diploidify`
+> was not set on the run, so the DRAGEN default applies; check the observed
+> chrX and chrY allele numbers against the table above before release.
 
 ---
 
@@ -195,9 +223,10 @@ The whole-cohort figures are the unsuffixed `AC`, `AN`, `AF` and `nhomalt` above
 there is no separate `_all` suffix. See [subpopulations.md](subpopulations.md) for what the Jeju
 stratum is and when to use it.
 
-> **TODO:** confirm the minimum stratum size policy and whether these fields are
-> suppressed at very rare variants; see
-> [subpopulations.md](subpopulations.md#minimum-stratum-size).
+The stratified fields are **not suppressed at rare variants**: `AC_jeju = 1`
+is published like any other value. See
+[subpopulations.md](subpopulations.md#minimum-stratum-size) for why, and read
+`AN_jeju` before drawing a conclusion from a small `AC_jeju`.
 
 ---
 

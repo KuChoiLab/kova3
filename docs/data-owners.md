@@ -151,10 +151,35 @@ That is why it is released under an agreement rather than a license: recipients
 are bound not to attempt re-identification, not to redistribute, and to hold the
 data on institution-managed systems accessible only to named users.
 
-> **TODO:** state whether a minimum allele-count threshold or other
-> small-cell suppression is applied to very rare variants, and if so, the
-> threshold and rationale. Decide before launch; see
-> [methods.md](methods.md#variant-level-filtering).
+### No small-cell suppression
+
+**KOVA3 applies no minimum allele-count threshold.** Singletons are published:
+a site with `AC = 1` appears with its count, and so does `AC_jeju = 1`. The
+same holds for every other aggregate field.
+
+This is a deliberate decision, and the reasoning is worth stating because the
+opposite choice is a common reflex.
+
+Suppression would remove exactly the frequencies clinical users need. ACMG/AMP
+BA1 and BS1 evidence turns on how rare a variant is in a matched population,
+and rare-disease filtering happens at the low end of the spectrum. A resource
+that hides its smallest counts is silent where it is most useful, and it also
+destroys the distinction KOVA3 works hardest to preserve: a suppressed count
+and a genuinely unobserved variant become indistinguishable, which is the
+failure the callability resources exist to prevent.
+
+The privacy argument does not require it either. The open tier carries no
+individual genotypes, no participant identifiers and no participant-level
+metadata, so there is nothing to link a published count back to. The classical
+attack on aggregate allele frequencies assumes the attacker already holds the
+target individual's genotypes, and its feasibility is governed by cohort size
+rather than by whether singletons are shown. At 11,000 records for the whole
+cohort and 2,987 for the Jeju stratum, both are far above the range where that
+attack is practical. Data that genuinely is re-identifiable lives in the
+controlled tier, where it is bound by an agreement rather than published.
+
+Every other frequency resource of this kind, including gnomAD, 1000 Genomes
+and SG10K, publishes singleton counts for the same reasons.
 
 ---
 
