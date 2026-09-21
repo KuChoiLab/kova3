@@ -191,7 +191,8 @@ data ownership.
 
 - **Questions and bug reports:** open an issue in this repository
 - **Contact:** Jungmin Choi, Korea University College of Medicine,
-  <jungminchoi@korea.ac.kr>
+  <jungminchoi@korea.ac.kr>, copying the KOVA3 data access team at
+  <ku.choi.lab@gmail.com>
 - **Release announcements:** watch this repository, or see
   [docs/versioning.md](docs/versioning.md) for the announcement channels
 

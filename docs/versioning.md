@@ -120,6 +120,26 @@ Each release publishes, at minimum:
 - [ ] Snapshot of this documentation under `docs/`
 - [ ] `CHANGELOG.md` entry
 
+### Release gate
+
+Before anything is made public, the release gate must pass on **every published
+layer**, not only the sites-only VCF. Each layer can leak independently: a
+stray column in Parquet, a path or a sample list left in a Hail Table global
+field, an internal key in `manifest.json`, or a partition named after anything
+other than a coordinate.
+
+- [ ] Sites-only VCF: [`scripts/verify_sites_only.py`](../scripts/verify_sites_only.py) with `--sample-list` and `--exclusion-list`, and without `--max-records`
+- [ ] Parquet: column names match [schemas.md](schemas.md#columns) exactly, row count reconciles against the VCF, partition keys are `chromosome` and `position_bin` only, and no string column holds a participant identifier
+- [ ] Hail Table: the `describe()` output matches the published schema, and no global field carries a file path, a sample list or an internal identifier
+- [ ] Callability BED and Parquet: coordinates and the published columns only
+- [ ] `manifest.json`: every key begins with `data/` or `metadata/`, and the file carries no local path, no non-public S3 URI and no e-mail address
+
+> **TODO:** extend the release gate to cover the four layers above. It checks
+> only the sites-only VCF today. Those checks cannot be written or tested
+> before the first callset exists, and an unverified gate is worse than none,
+> so this is done once the export is produced and before anything is
+> published.
+
 ---
 
 ## Release history

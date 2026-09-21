@@ -127,12 +127,18 @@ governs.
 
 ## How to apply
 
-Send the materials listed above to:
+Send the materials listed above to **both** addresses below, so that an
+application is never held up by a single mailbox.
 
-**Jungmin Choi**, <jungminchoi@korea.ac.kr>
-Department of Biomedical Sciences, Korea University College of Medicine
+| | Address |
+|---|---|
+| Principal investigator, and the decision on your application | **Jungmin Choi**, <jungminchoi@korea.ac.kr> |
+| KOVA3 data access team, for receipt and correspondence | <ku.choi.lab@gmail.com> |
 
-Please use the subject line `KOVA3 controlled-tier access request`.
+Department of Biomedical Sciences, Korea University College of Medicine.
+
+Please use the subject line `KOVA3 controlled-tier access request`, and write
+from your institutional address rather than a personal one.
 
 ### What happens next
 
@@ -172,8 +178,8 @@ a single locus can be streamed without downloading the file.
 
 If you are unsure whether your analysis needs the controlled tier, or whether
 you are eligible, ask before preparing a full application. Open an issue in
-this repository for general questions, or email the address above for questions
-specific to your project.
+this repository for general questions, or write to <ku.choi.lab@gmail.com> for
+questions specific to your project.
 
 ---
 

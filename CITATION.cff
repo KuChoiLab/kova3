@@ -9,7 +9,9 @@ abstract: >-
 type: dataset
 license: CC-BY-4.0
 url: "https://github.com/KuChoiLab/kova3"
-repository: "https://registry.opendata.aws/kova3/"
+# Uncomment once the Registry of Open Data entry is merged and live. Until then
+# the URL returns 404 and would render as a dead link on the citation card.
+# repository: "https://registry.opendata.aws/kova3/"
 # `version` and `date-released` are deliberately absent: they are optional in
 # CFF 1.2.0, and a placeholder value would make this file invalid and break the
 # "Cite this repository" button. Add both at the first release.

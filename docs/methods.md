@@ -222,33 +222,30 @@ sample contributes to no allele number anywhere in the release.
 A **maximal unrelated set** is retained. Related individuals are not
 down-weighted, and the published allele numbers are those of the retained set.
 
-The kinship coefficient is computed with **KING**. The input is the PASS-only
-single-nucleotide variants in exonic regions, converted to PLINK binary format,
-and KING is run in kinship mode with IBS statistics.
+Kinship is estimated with Hail `pc_relate` on the pruned QC variant set, using
+a minimum individual minor allele frequency of **0.001**, **k = 3** principal
+components, and `statistics='kin20'`. `'kin20'` is used rather than `'kin'`
+because the IBS0 estimate needed to separate the relationship classes is not
+returned by `'kin'`.
 
 **The threshold is `kinship > 0.1`**, which removes duplicates, first-degree
 and second-degree relatives while retaining third-degree and more distant
-pairs.
+pairs. Each pair above the threshold is an edge in a graph, and Hail's
+`maximal_independent_set` picks the samples to drop so that no edge survives
+while as few samples as possible are removed. The samples that remain are the
+unrelated set. This is also what resolves duplicates, as described above.
 
-Pruning is greedy rather than a single pass. While any pair above the
-threshold remains: take the sample or samples with the most relatedness edges;
-among those, drop the one with the **lowest fraction of the genome covered at
-10x**, using mean alignment coverage as a tie-break; recompute the remaining
-pairs. This removes the smallest number of samples that breaks every edge, and
-where the choice is arbitrary it keeps the better-sequenced record. It is also
-what resolves duplicates, as described above.
+Two cross-checks are run against the same cohort and compared against that
+result: `somalier relate` (v0.3.0), and **KING** over the PASS-only
+single-nucleotide variants in exonic regions, converted to PLINK binary format
+and pruned greedily at the same `0.1` threshold (repeatedly dropping the sample
+with the most edges, breaking ties by the lowest fraction of the genome covered
+at 10x).
 
-Two cross-checks are run against the same cohort. The first is
-`somalier relate` (v0.3.0). The second is Hail `pc_relate`, with a minimum
-individual minor allele frequency of **0.001**, **k = 3** principal components
-and `statistics='kin20'`; pairs above the same **0.1** kinship threshold are
-then resolved with Hail's `maximal_independent_set`. `'kin20'` is used rather
-than `'kin'` because the IBS0 estimate needed to separate the relationship
-classes is not returned by `'kin'`.
-
-The two methods agree closely but not exactly, and **the KING result is the one the release
-uses**; the Hail figure is not interchangeable with it and the two must not be
-mixed in a single report.
+The three agree closely but not exactly. **The Hail `pc_relate` plus
+`maximal_independent_set` result is what the release uses**; the KING and
+somalier figures are cross-checks, are not interchangeable with it, and must
+not be mixed with it in a single report.
 
 > **TODO:** report, for the production callset, the number of samples removed,
 > the number of unrelated individuals retained, and the breakdown of removed
