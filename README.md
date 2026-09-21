@@ -42,8 +42,8 @@ burden for Korean patients.
 | Aggregate metadata | Cohort-level descriptions in TSV/Parquet |
 | Documentation | This repository, plus JSON schemas and release manifests |
 
-Per-site fields include cohort allele count (`GAC`), allele number (`GAN`),
-allele frequency (`GAF`), homozygote count, call rate, Hardy-Weinberg and
+Per-site fields include cohort allele count (`AC`), allele number (`AN`),
+allele frequency (`AF`), homozygote count, call rate, Hardy-Weinberg and
 allelic-balance statistics, and quality filters. Fields are published under the
 names DRAGEN emits, with a `G` prefix marking cohort-wide values. See the
 [data dictionary](docs/data-dictionary.md).
@@ -92,8 +92,9 @@ reference FASTA and accession.
 
 ## Quick start
 
-> **TODO:** replace `<OPEN_BUCKET>` and `<RELEASE>` with the published S3 bucket
-> name and release tag once the dataset is live on the Registry of Open Data.
+> **Note.** The bucket name `kova3-open` (Asia Pacific, Seoul, `ap-northeast-2`)
+> and the release tag `v3.0.0` are the values KOVA3 will publish under. The
+> bucket is not created yet, so these commands will not resolve until launch.
 
 Query a gene interval without downloading anything:
 
@@ -102,7 +103,7 @@ Query a gene interval without downloading anything:
 # requested region are transferred, not the whole file.
 bcftools view \
   -r chr17:43044295-43125364 \
-  https://<OPEN_BUCKET>.s3.amazonaws.com/data/release=<RELEASE>/sites_vcf/kova3.chr17.sites.vcf.gz
+  https://kova3-open.s3.ap-northeast-2.amazonaws.com/data/release=v3.0.0/sites_vcf/kova3.chr17.sites.vcf.gz
 ```
 
 Annotate your own VCF with Korean allele frequencies:
@@ -111,8 +112,8 @@ Annotate your own VCF with Korean allele frequencies:
 # Add KOVA3 cohort allele counts and frequencies to an existing patient VCF.
 # The G prefix means cohort-wide; see docs/data-dictionary.md.
 bcftools annotate \
-  -a https://<OPEN_BUCKET>.s3.amazonaws.com/data/release=<RELEASE>/sites_vcf/kova3.chr17.sites.vcf.gz \
-  -c INFO/GAC,INFO/GAN,INFO/GAF,INFO/KOVA3_HOMALT \
+  -a https://kova3-open.s3.ap-northeast-2.amazonaws.com/data/release=v3.0.0/sites_vcf/kova3.chr17.sites.vcf.gz \
+  -c INFO/AC,INFO/AN,INFO/AF,INFO/nhomalt \
   -O z -o patient.kova3.vcf.gz \
   patient.vcf.gz
 ```
@@ -122,7 +123,7 @@ Load the Hail Table:
 ```python
 import hail as hl
 # No import step needed; the table is prebuilt and partitioned.
-ht = hl.read_table("s3://<OPEN_BUCKET>/data/release=<RELEASE>/hail/kova3.sites.ht")
+ht = hl.read_table("s3://kova3-open/data/release=v3.0.0/hail/kova3.sites.ht")
 ht.describe()
 ```
 

@@ -57,11 +57,13 @@ per-cohort ascertainment before assuming that cases of that disease are absent.
 |---|---|---|---|
 | National Integrated Bio-Big Data (KOBIC) | *TODO* | *TODO* | *TODO* |
 | Jeju Genome | *TODO* | *TODO* | *TODO* |
-| Korea4K | *TODO* | *TODO* | *TODO* |
-| Korea10K | *TODO* | *TODO* | *TODO* |
+| Korea4K / Korea10K (KOGIC) | *TODO* | *TODO* | *TODO* |
 
 > **TODO, complete before launch.** Fill the table above from each cohort's
 > study protocol. State explicitly where ascertainment differs between cohorts.
+> Korea4K and Korea10K are grouped here because both were produced by KOGIC;
+> confirm that they were recruited under the same protocol, and split the row
+> again if they were not.
 > Do **not** label any cohort a "healthy control" set unless that is supported by
 > that cohort's own protocol. This affects how users interpret allele
 > frequencies for disease-specific analyses.

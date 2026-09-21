@@ -22,7 +22,15 @@ Exit code 0 = PASS, 1 = FAIL (details on stderr), 2 = usage error.
 Usage
   python3 verify_sites_only.py release/chr21.sites.vcf.gz
   python3 verify_sites_only.py release/*.sites.vcf.gz --sample-list samples.txt \
-      --allow-info AC,AN,AF,nhomalt,KOVA3_call_rate ... --max-records 0
+      --allow-info "$KOVA3_OPEN_INFO" --max-records 0
+
+The published open-tier INFO allow-list (see docs/data-dictionary.md) is:
+
+  KOVA3_OPEN_INFO=AC,AN,AF,nhomalt,call_rate,NS,NS_GT,NS_NOGT,NS_NODATA,\
+AC_jeju,AN_jeju,AF_jeju,nhomalt_jeju,GIC,GHWE,GHWEc2,GExcHet,GABHom,GABHet,GABHetP
+
+Passing it is what catches a failed rename or a batch-level field that survived
+export, because anything outside the list fails the run.
 
 --max-records N limits body scanning to the first N records (0 = all; default all).
 Only the standard library is used; gzip/bgzip input is handled transparently.

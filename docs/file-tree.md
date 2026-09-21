@@ -7,7 +7,7 @@ active Data Use Agreement. Their layouts are given separately below.
 ## Open-tier bucket layout
 
 ```
-s3://<OPEN_BUCKET>/
+s3://kova3-open/
 ├── README.md                          # Points here; orientation for users arriving at the bucket
 ├── LICENSE                            # CC BY 4.0
 ├── CHANGELOG.md                       # Release history
@@ -24,7 +24,7 @@ s3://<OPEN_BUCKET>/
 │   └── data-access.md
 │
 ├── metadata/
-│   ├── release=<RELEASE>/
+│   ├── release=v3.0.0/
 │   │   ├── manifest.json              # Every object, size, checksum; see below
 │   │   ├── cohort_summary.tsv         # Aggregate cohort metadata
 │   │   ├── cohort_summary.parquet
@@ -36,7 +36,7 @@ s3://<OPEN_BUCKET>/
 │       └── vcf_header.txt
 │
 └── data/
-    └── release=<RELEASE>/
+    └── release=v3.0.0/
         ├── sites_vcf/
         │   ├── kova3.chr1.sites.vcf.gz
         │   ├── kova3.chr1.sites.vcf.gz.tbi
@@ -58,8 +58,7 @@ s3://<OPEN_BUCKET>/
             └── kova3.call_rate.chr1.<ext>
 ```
 
-> **TODO:** replace `<OPEN_BUCKET>`, `<CONTROLLED_BUCKET>`, and `<RELEASE>`
-> throughout once assigned, and settle the callability file format and extension
+> **TODO:** settle the callability file format and extension
 > see [methods.md](methods.md#callability). Confirm whether chrM is included;
 > if mitochondrial variants are not called, remove that line rather than shipping
 > an empty file.
@@ -73,7 +72,7 @@ per-sample manifest is the entry point: read-level format varies by sample, so
 resolve availability from the manifest rather than by listing the bucket.
 
 ```
-s3://<CONTROLLED_BUCKET>/
+s3://kova3-controlled/
 ├── manifest/
 │   ├── samples.tsv                    # One row per sample: cohort, formats held, object keys
 │   └── samples.parquet
@@ -94,7 +93,7 @@ s3://<CONTROLLED_BUCKET>/
 │       └── <SAMPLE>.g.vcf.gz.tbi
 │
 └── msvcf/
-    └── release=<RELEASE>/             # Genotyped multi-sample VCF, chromosome-sharded
+    └── release=v3.0.0/             # Genotyped multi-sample VCF, chromosome-sharded
         ├── kova3.chr1.vcf.gz
         ├── kova3.chr1.vcf.gz.tbi
         └── ...
@@ -152,7 +151,7 @@ so users arriving from the Registry of Open Data find a familiar structure.
 
 ## Release manifest
 
-Every release publishes `metadata/release=<RELEASE>/manifest.json` listing each
+Every release publishes `metadata/release=v3.0.0/manifest.json` listing each
 object with its size and checksum.
 
 ```json
@@ -185,7 +184,7 @@ object with its size and checksum.
 ```bash
 # Every object carries a published SHA-256 checksum. Verify after download.
 aws s3 cp --no-sign-request \
-  s3://<OPEN_BUCKET>/data/release=<RELEASE>/sites_vcf/kova3.chr1.sites.vcf.gz .
+  s3://kova3-open/data/release=v3.0.0/sites_vcf/kova3.chr1.sites.vcf.gz .
 
 sha256sum kova3.chr1.sites.vcf.gz
 # Compare against the sha256 field for this key in manifest.json.
@@ -196,5 +195,5 @@ sha256sum kova3.chr1.sites.vcf.gz
 ```bash
 # No AWS account or credentials are required.
 aws s3 ls --no-sign-request \
-  s3://<OPEN_BUCKET>/data/release=<RELEASE>/sites_vcf/
+  s3://kova3-open/data/release=v3.0.0/sites_vcf/
 ```

@@ -57,23 +57,23 @@ aligned with the sites-only VCF. See
 | `rsid` | STRING | yes | dbSNP identifier where assigned |
 | `qual` | FLOAT | yes | Site quality |
 | `filter` | LIST\<STRING\> | no | Filter values; `["PASS"]` when passing |
-| `gac` | INT32 | no | Cohort alternate allele count |
-| `gan` | INT32 | no | Cohort called allele number |
-| `gaf` | DOUBLE | no | Cohort alternate allele frequency |
-| `gns` | INT32 | no | Samples in the cohort |
-| `gns_gt` | INT32 | no | Samples with a called genotype |
-| `gns_nogt` | INT32 | no | Samples with no called genotype |
-| `gns_nodata` | INT32 | no | Samples with no coverage |
-| `kova3_homalt` | INT32 | no | Homozygous alternate individuals (derived) |
-| `kova3_cr` | FLOAT | no | Call rate (derived) |
+| `ac` | INT32 | no | Cohort alternate allele count |
+| `an` | INT32 | no | Cohort called allele number |
+| `af` | DOUBLE | no | Cohort alternate allele frequency |
+| `ns` | INT32 | no | Samples in the cohort |
+| `ns_gt` | INT32 | no | Samples with a called genotype |
+| `ns_nogt` | INT32 | no | Samples with no called genotype |
+| `ns_nodata` | INT32 | no | Samples with no coverage |
+| `nhomalt` | INT32 | no | Homozygous alternate individuals (derived) |
+| `call_rate` | FLOAT | no | Call rate (derived) |
 | `gic` | FLOAT | yes | Inbreeding coefficient |
 | `ghwec2` | FLOAT | yes | Hardy-Weinberg P-value, site-wise |
 | `ghwe` | FLOAT | yes | Hardy-Weinberg P-value, allele-wise |
 | `gexchet` | FLOAT | yes | Excess heterozygosity P-value |
-| `kova3_ac_jeju` | INT32 | yes | Alternate allele count, Jeju stratum |
-| `kova3_an_jeju` | INT32 | yes | Called allele number, Jeju stratum |
-| `kova3_af_jeju` | DOUBLE | yes | Alternate allele frequency, Jeju stratum |
-| `kova3_homalt_jeju` | INT32 | yes | Homozygous alternate individuals, Jeju stratum |
+| `ac_jeju` | INT32 | yes | Alternate allele count, Jeju stratum |
+| `an_jeju` | INT32 | yes | Called allele number, Jeju stratum |
+| `af_jeju` | DOUBLE | yes | Alternate allele frequency, Jeju stratum |
+| `nhomalt_jeju` | INT32 | yes | Homozygous alternate individuals, Jeju stratum |
 
 Quality-control columns are nullable because DRAGEN omits these fields at sites
 where they cannot be computed. A null means not calculable, not zero.
@@ -93,19 +93,19 @@ where they cannot be computed. A null means not calculable, not zero.
 ```sql
 -- Korean allele frequencies for a gene interval.
 -- Partition pruning limits the scan to the blocks overlapping the region.
-SELECT variant_id, ref, alt, gac, gan, gaf, kova3_homalt
+SELECT variant_id, ref, alt, ac, an, af, nhomalt
 FROM kova3.sites
 WHERE chromosome = 'chr17'
   AND pos BETWEEN 43044295 AND 43125364
-  AND gaf < 0.01
-  AND gan > 15000          -- require adequate power before trusting a low frequency
+  AND af < 0.01
+  AND an > 15000          -- require adequate power before trusting a low frequency
 ORDER BY pos;
 ```
 
 ```sql
 -- Look up a specific variant list. Restricting the columns selected keeps
 -- bytes scanned low, since Parquet reads only the requested columns.
-SELECT variant_id, gaf, gan
+SELECT variant_id, af, an
 FROM kova3.sites
 WHERE variant_id IN ('chr17-43093464-A-G', 'chr13-32340301-G-A');
 ```
@@ -135,18 +135,18 @@ Row fields:
     'qual': float64
     'filters': set<str>
     'info': struct {
-        GAC: int32,
-        GAN: int32,
-        GAF: float64,
-        GNS: int32,
-        GNS_GT: int32,
+        AC: int32,
+        AN: int32,
+        AF: float64,
+        NS: int32,
+        NS_GT: int32,
         GIC: float64,
         GHWEc2: float64,
-        KOVA3_HOMALT: int32,
-        KOVA3_CR: float64,
-        KOVA3_AC_jeju: int32,
-        KOVA3_AN_jeju: int32,
-        KOVA3_AF_jeju: float64
+        nhomalt: int32,
+        call_rate: float64,
+        AC_jeju: int32,
+        AN_jeju: int32,
+        AF_jeju: float64
     }
 ----------------------------------------
 Key: ['locus', 'alleles']
@@ -163,16 +163,16 @@ Key: ['locus', 'alleles']
 import hail as hl
 
 # The table is prebuilt and partitioned; no import step is required.
-kova3 = hl.read_table("s3://<OPEN_BUCKET>/data/release=<RELEASE>/hail/kova3.sites.ht")
+kova3 = hl.read_table("s3://kova3-open/data/release=v3.0.0/hail/kova3.sites.ht")
 
 # Annotate your own dataset with Korean allele frequencies.
 mt = mt.annotate_rows(kova3=kova3[mt.row_key].info)
 
 # Filter to variants rare in Koreans, keeping sites with adequate power.
-# GAF is the cohort-wide frequency; GAN is its denominator.
+# AF is the cohort-wide frequency; AN is its denominator.
 mt = mt.filter_rows(
-    hl.is_missing(mt.kova3.GAF)
-    | ((mt.kova3.GAF < 0.001) & (mt.kova3.GAN > 15000))
+    hl.is_missing(mt.kova3.AF)
+    | ((mt.kova3.AF < 0.001) & (mt.kova3.AN > 15000))
 )
 ```
 

@@ -8,29 +8,56 @@ same names; see [schemas.md](schemas.md).
 
 ## Field naming convention
 
-KOVA3 publishes fields under **the names the DRAGEN iterative gVCF Genotyper
-(iGG) emits**, unchanged, so that a user familiar with a DRAGEN callset finds
-what they expect and so the published files can be checked directly against the
-joint genotyping output.
+KOVA3 publishes the frequency fields under **the names used across the
+population-genomics community**: `AC`, `AN`, `AF`, `nhomalt`, and, for a
+stratum, `AC_<stratum>`. A pipeline written against gnomAD, 1000 Genomes or any
+other frequency resource reads a KOVA3 file without modification.
 
-Two conventions from iGG carry through to KOVA3 and are worth understanding
-before reading the tables below.
+This requires a rename relative to the joint genotyping output, because the
+DRAGEN iterative gVCF Genotyper (iGG) uses its own convention. Three points
+follow from that, and they matter when reading the tables below.
 
-**The `G` prefix means global.** iGG writes each metric twice: once for the
-current processing batch, and once for the whole cohort, with the cohort-wide
-name prefixed by `G`. KOVA3 aggregates every contributing cohort into one
-callset, so **the `G`-prefixed fields are the ones users want**. `GAF` is the
-Korean allele frequency; `AF` is a per-batch artefact of how the callset was
-assembled and carries no population meaning.
+**The batch-level fields are removed.** iGG writes each frequency metric twice:
+once for the processing batch that produced the record, and once for the whole
+cohort, with the cohort-wide name prefixed by `G`. The batch-level values
+reflect how the callset happened to be sharded and carry no population meaning,
+so a user who filtered on them would get a meaningless answer. KOVA3 therefore
+**drops the batch-level fields from the published release** and publishes only
+the cohort-wide values, under the standard unprefixed names.
+
+**Names that have a community standard are renamed to it; DRAGEN's own quality
+statistics keep their source names.** `GAC` is published as `AC`. The
+DRAGEN-specific statistics (`GIC`, `GHWE`, `GHWEc2`, `GExcHet`, `GABHom`,
+`GABHet`, `GABHetP`) have no community equivalent, so they are published
+unchanged and can be checked directly against the DRAGEN documentation. The
+mapping is given in full below.
 
 **Missing fields are omitted, not zero-filled.** iGG drops an INFO field from a
 record entirely when its value is missing at that site, so different records can
 carry different sets of fields. A parser must treat an absent field as missing
 rather than assuming it is present on every line.
 
-Fields KOVA3 computes itself, because iGG does not emit them, are marked
-**derived** and named with a `KOVA3_` prefix so they cannot collide with any
-DRAGEN field.
+### Mapping from the joint genotyping output
+
+| DRAGEN iGG | Published in KOVA3 | Note |
+|---|---|---|
+| `GAC` | `AC` | |
+| `GAN` | `AN` | |
+| `GAF` | `AF` | |
+| `GNS` | `NS` | |
+| `GNS_GT` | `NS_GT` | |
+| `GNS_NOGT` | `NS_NOGT` | |
+| `GNS_NODATA` | `NS_NODATA` | |
+| `GIC`, `GHWE`, `GHWEc2`, `GExcHet` | unchanged | No community equivalent |
+| `GABHom`, `GABHet`, `GABHetP` | unchanged | No community equivalent |
+| `AC`, `AN`, `AF`, `NS`, `NS_GT`, `NS_NOGT`, `NS_NODATA` (batch-level) | **removed** | Batch artefact, no population meaning |
+| (derived by KOVA3) | `nhomalt` | Homozygous-alternate individual count |
+| (derived by KOVA3) | `call_rate` | `NS_GT / NS` |
+| (derived by KOVA3) | `AC_jeju`, `AN_jeju`, `AF_jeju`, `nhomalt_jeju` | Jeju stratum; see [subpopulations.md](subpopulations.md) |
+
+Because the batch-level fields are removed before publication, the published
+`AC`, `AN`, `AF`, `NS`, `NS_GT`, `NS_NOGT` and `NS_NODATA` are unambiguous: they
+are always the cohort-wide values.
 
 > **TODO, before launch.** The field list below is taken from the DRAGEN v4.4
 > iGG documentation. Confirm it against the header of the produced callset,
@@ -75,46 +102,50 @@ These are the fields most users will consume. All are cohort-wide.
 
 | Field | Number | Type | Description |
 |---|---|---|---|
-| `GAC` | A | Integer | Alternate allele count across the whole cohort |
-| `GAN` | 1 | Integer | Total called alleles at this site across the whole cohort. The denominator for `GAF` |
-| `GAF` | A | Float | Alternate allele frequency across the whole cohort |
-| `GNS` | 1 | Integer | Number of samples in the cohort |
-| `GNS_GT` | 1 | Integer | Number of samples with a called genotype at this site |
-| `GNS_NOGT` | 1 | Integer | Number of samples with no called genotype at this site |
-| `GNS_NODATA` | 1 | Integer | Number of samples with no coverage at this site |
-| `KOVA3_HOMALT` | A | Integer | **Derived.** Number of individuals homozygous for the alternate allele |
-| `KOVA3_CR` | 1 | Float | **Derived.** Call rate, `GNS_GT / GNS`, 0–1 |
+| `AC` | A | Integer | Alternate allele count across the whole cohort |
+| `AN` | 1 | Integer | Total called alleles at this site across the whole cohort. The denominator for `AF` |
+| `AF` | A | Float | Alternate allele frequency across the whole cohort |
+| `NS` | 1 | Integer | Number of samples in the cohort |
+| `NS_GT` | 1 | Integer | Number of samples with a called genotype at this site |
+| `NS_NOGT` | 1 | Integer | Number of samples with no called genotype at this site |
+| `NS_NODATA` | 1 | Integer | Number of samples with no coverage at this site |
+| `nhomalt` | A | Integer | **Derived.** Number of individuals homozygous for the alternate allele |
+| `call_rate` | 1 | Float | **Derived.** Call rate, `NS_GT / NS`, 0–1 |
 
-**Interpreting `GAN`.** `GAF` alone is not sufficient for variant
-classification. A site with `GAF = 0` and `GAN = 21,000` is well-powered
-evidence of absence in Koreans; a site with `GAF = 0` and `GAN = 400` is not.
-Always read `GAN` alongside `GAF`, and consult the callability resources
+**Interpreting `AN`.** `AF` alone is not sufficient for variant
+classification. A site with `AF = 0` and `AN = 21,000` is well-powered
+evidence of absence in Koreans; a site with `AF = 0` and `AN = 400` is not.
+Always read `AN` alongside `AF`, and consult the callability resources
 described in [methods.md](methods.md#callability) for regions absent from the
 callset entirely.
 
-**`GNS_NOGT` versus `GNS_NODATA`.** These distinguish two different reasons a
+**`NS_NOGT` versus `NS_NODATA`.** These distinguish two different reasons a
 sample contributes no genotype: the site was covered but not confidently
 genotyped, or it had no coverage at all. Users assessing whether a region is
 interpretable should look at both.
 
 **Chromosome X and Y.** Allele numbers on the sex chromosomes reflect ploidy, so
-`GAN` in non-pseudoautosomal regions is not simply twice the sample count.
+`AN` in non-pseudoautosomal regions is not simply twice the sample count.
 
 > **TODO:** document the ploidy model used for chrX, chrY, and the
 > pseudoautosomal regions, state whether `--gg-diploidify` was applied, and
-> confirm whether `GAF` on the sex chromosomes is computed against a sex-aware
+> confirm whether `AF` on the sex chromosomes is computed against a sex-aware
 > denominator.
 
-### Batch-level counterparts
+### Batch-level fields are not published
 
-iGG also writes unprefixed `AC`, `AN`, `AF`, `NS`, `NS_GT`, `NS_NOGT`, and
-`NS_NODATA` for the processing batch that produced each record.
+iGG writes a second set of `AC`, `AN`, `AF`, `NS`, `NS_GT`, `NS_NOGT` and
+`NS_NODATA` values describing only the processing batch that produced each
+record. Those values reflect how the callset happened to be sharded, carry no
+population meaning, and are a predictable source of error: a user who filtered
+on them would believe they were filtering on the Korean frequency.
 
-> **TODO:** decide whether to retain the unprefixed batch fields in the public
-> release. Recommendation: **drop them.** They reflect how the callset was
-> sharded during processing, carry no population meaning, and are a predictable
-> source of user error: someone will filter on `AF` thinking it is the Korean
-> frequency. If they are retained, this section must say so prominently.
+**KOVA3 removes them during export.** The `AC`, `AN` and `AF` published in the
+open tier are always the cohort-wide values across all 11,008 genomes. The
+export step is checked by the release gate
+[`scripts/verify_sites_only.py`](../scripts/verify_sites_only.py), which fails
+the release if any INFO key outside the published allow-list appears in the
+output.
 
 ---
 
@@ -168,10 +199,10 @@ computes them from the callset before genotypes are dropped.
 
 | Field | Number | Type | Description |
 |---|---|---|---|
-| `KOVA3_AC_jeju` | A | Integer | Alternate allele count within the Jeju stratum |
-| `KOVA3_AN_jeju` | 1 | Integer | Called alleles within the Jeju stratum |
-| `KOVA3_AF_jeju` | A | Float | Alternate allele frequency within the Jeju stratum |
-| `KOVA3_HOMALT_jeju` | A | Integer | Homozygous alternate individuals within the Jeju stratum |
+| `AC_jeju` | A | Integer | Alternate allele count within the Jeju stratum |
+| `AN_jeju` | 1 | Integer | Called alleles within the Jeju stratum |
+| `AF_jeju` | A | Float | Alternate allele frequency within the Jeju stratum |
+| `nhomalt_jeju` | A | Integer | Homozygous alternate individuals within the Jeju stratum |
 
 The whole-cohort figures are the `G`-prefixed fields above; there is no separate
 `_all` suffix. See [subpopulations.md](subpopulations.md) for what the Jeju
@@ -185,8 +216,9 @@ stratum is and when to use it.
 
 ## Deriving the KOVA3 fields
 
-The `KOVA3_`-prefixed fields do not come from iGG and must be computed while
-per-sample genotypes are still present. This matters for pipeline ordering: iGG
+The derived fields `nhomalt`, `call_rate` and the stratified `*_jeju` fields do
+not come from iGG and must be computed while per-sample genotypes are still
+present. This matters for pipeline ordering: iGG
 can emit a sites-only callset directly via `--gg-drop-genotypes`, but doing so
 too early discards the information the homozygote counts and stratified
 frequencies are computed from.
@@ -194,8 +226,10 @@ frequencies are computed from.
 The required order is:
 
 1. Run iGG to produce the full msVCF **with** genotypes
-2. Compute `KOVA3_HOMALT`, `KOVA3_CR`, and the stratified fields from it
-3. Drop genotypes and publish the sites-only layer with those fields annotated
+2. Compute `nhomalt`, `call_rate`, and the stratified fields from it
+3. Drop genotypes, drop the batch-level fields, and rename the cohort-wide
+   `G`-prefixed fields to their published names per the mapping above
+4. Publish the sites-only layer and run the release gate over it
 
 > **TODO:** publish the exact commands used for step 2 so the derived fields are
 > reproducible.
@@ -208,7 +242,7 @@ The required order is:
 |---|---|
 | `PASS` | Site passed all filters |
 
-iGG applies hard filters to global metrics (`QUAL`, `GNS_GT`, `GIC`, `GHWEc2`,
+iGG applies hard filters to global metrics (`QUAL`, `NS_GT`, `GIC`, `GHWEc2`,
 and `GABHetP` are the available filtering criteria. Filtering is per-site, so
 SNVs and indels cannot be filtered separately as they can in the variant caller.
 

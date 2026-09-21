@@ -5,8 +5,8 @@ belongs to one of them.
 
 | Stratum | Definition | Fields |
 |---|---|---|
-| `all` | Every included sample | `GAC`, `GAN`, `GAF`, `KOVA3_HOMALT` |
-| `jeju` | Samples from the Jeju Genome cohort | `KOVA3_AC_jeju`, `KOVA3_AN_jeju`, `KOVA3_AF_jeju`, `KOVA3_HOMALT_jeju` |
+| `all` | Every included sample | `AC`, `AN`, `AF`, `nhomalt` |
+| `jeju` | Samples from the Jeju Genome cohort | `AC_jeju`, `AN_jeju`, `AF_jeju`, `nhomalt_jeju` |
 
 **The `all` stratum has no `_all` suffix.** Its fields are the `G`-prefixed
 DRAGEN fields, which are already cohort-wide by definition, so adding a suffixed
@@ -39,7 +39,7 @@ which it is not.
 
 A third stratum for the complement of Jeju, meaning mainland samples, is not
 published, because it is exactly derivable from the two that are:
-`GAC − KOVA3_AC_jeju` over `GAN − KOVA3_AN_jeju`. Publishing it would add no
+`AC − AC_jeju` over `AN − AN_jeju`. Publishing it would add no
 information and one more chance for the three figures to disagree.
 
 ---
@@ -90,13 +90,13 @@ published, and only in aggregate.
 
 ## Guidance for users
 
-**Use the `all` stratum**, `GAF` with `GAN`, unless you have a specific reason
+**Use the `all` stratum**, `AF` with `AN`, unless you have a specific reason
 to restrict to Jeju. For clinical variant filtering in Korean patients,
 the whole-cohort frequency is the right number in almost every case.
 
 The Jeju fields are useful when your samples are from Jeju, or when you are
 investigating whether a variant's frequency is uniform across Korea. Always
-check `KOVA3_AN_jeju` before drawing a conclusion from `KOVA3_AF_jeju`: the
+check `AN_jeju` before drawing a conclusion from `AF_jeju`: the
 stratum denominator is roughly a quarter of the whole-cohort denominator, so a
 frequency estimate from it carries correspondingly more uncertainty.
 

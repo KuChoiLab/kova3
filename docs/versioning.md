@@ -32,7 +32,7 @@ Always record the release tag used in any analysis, and cite it in
 publications. Release paths include the tag:
 
 ```
-s3://<OPEN_BUCKET>/data/release=v3.0.0/...
+s3://kova3-open/data/release=v3.0.0/...
 ```
 
 There is no "latest" alias that silently moves. This is deliberate: a moving
