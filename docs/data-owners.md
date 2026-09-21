@@ -42,44 +42,35 @@ genome projects, which retain ownership of their source data. The Choi Lab
 publishes only the derived aggregate layer, under agreements with each
 contributing institution.
 
-| Contributing cohort | Source institution | Legal entity that signs and is credited |
+| Contributing cohort | Source institution | Full institutional name |
 |---|---|---|
-| National Integrated Bio-Big Data (국가통합바이오빅데이터) | KOBIC | Korea Research Institute of Bioscience and Biotechnology (KRIBB) *(to be confirmed)* |
-| Korea4K | KOGIC | Ulsan National Institute of Science and Technology (UNIST) *(to be confirmed)* |
-| Korea10K | KOGIC | Ulsan National Institute of Science and Technology (UNIST) *(to be confirmed)* |
-| Jeju Genome | Invites Genomics (인바이츠지노믹스) | *Pending* |
+| National Integrated Bio-Big Data (국가통합바이오빅데이터) | KOBIC | Korea Bioinformation Center (KOBIC), Korea Research Institute of Bioscience and Biotechnology (KRIBB) / 한국생명공학연구원 |
+| Korea4K | KOGIC | Korean Genomics Center (KOGIC), Ulsan National Institute of Science and Technology (UNIST) / 울산과학기술원 |
+| Korea10K | KOGIC | Korean Genomics Center (KOGIC), Ulsan National Institute of Science and Technology (UNIST) / 울산과학기술원 |
+| Jeju Genome | InvitesGenomics | Invites Genomics Co., Ltd. / 인바이츠지노믹스㈜ |
 
 The Korea4K and Korea10K data were obtained from KOGIC; KOBIC acted as the
 transfer route for part of that delivery but is not the originating institution
 for those two cohorts.
 
-**Why the third column exists.** For two of these, the familiar name is a
-center rather than the body that can sign an agreement or be credited in a
-journal. KOBIC, the Korea Bioinformation Center, is a center within KRIBB;
-KOGIC, the Korean Genomics Center, is a center within UNIST. An agreement is
-signed by the parent institute, and a publication credits it, so the short name
-in the middle column is not by itself sufficient for either purpose. Invites
-Genomics is a company and is its own legal entity, but its registered English
-name has not been confirmed.
+**Why the third column names two bodies for three of the four rows.** KOBIC
+and KOGIC are centers rather than institutions in their own right: KOBIC sits
+within KRIBB, KOGIC within UNIST. Naming both is the form these groups use
+themselves, and it is what belongs in a publication. InvitesGenomics is a
+company, so one name serves.
 
-The candidate names above are taken from the affiliations printed in the KOVA2
-publication, where KOBIC appears as "Korea BioInformation Center (KOBIC), Korea
-Research Institute of Bioscience and Biotechnology (KRIBB)" and the KOGIC
-authors appear under "Ulsan National Institute of Science and Technology
-(UNIST)"
-([doi:10.1038/s12276-022-00871-4](https://doi.org/10.1038/s12276-022-00871-4)).
-A published affiliation is good evidence of the usual English rendering, but it
-is not a registered legal name and it does not establish which entity holds
-signing authority here.
+The English forms follow the affiliations printed in the source cohorts' own
+publications: "Korean Genomics Center (KOGIC), Ulsan National Institute of
+Science and Technology (UNIST)" and "Korea Bioinformation Center, Korea
+Research Institute of Bioscience and Biotechnology" in the Korea4K paper
+([doi:10.1093/gigascience/giae014](https://doi.org/10.1093/gigascience/giae014)),
+with UNIST likewise the corresponding institution of the Korea10K preprint
+([doi:10.1101/2025.11.17.688763](https://doi.org/10.1101/2025.11.17.688763)).
 
-> **TODO, blocking the first data release.** Confirm with each institution, in
-> writing: the registered legal entity name as it should appear in an
-> international publication, which body signs the data provision agreement, and
-> the exact wording of any required acknowledgement. This is part of the
-> institutional confirmation request that also settles the tables in
-> [Redistribution authority](#redistribution-authority) below, so it is asked
-> once rather than separately. Record required acknowledgement wording verbatim
-> in [CITATION.md](../CITATION.md#acknowledging-the-contributing-cohorts).
+KOBIC is written "Korea Bioinformation Center". The 2022 KOVA2 paper prints
+"Korea BioInformation Center"
+([doi:10.1038/s12276-022-00871-4](https://doi.org/10.1038/s12276-022-00871-4));
+that spelling is superseded and is not used here.
 
 ### What ownership covers
 
@@ -113,7 +104,7 @@ in-scope row is `No` or `Pending`.
 | Cohort | Consent permits public aggregate release¹ | Source-data owner | Authority to grant CC BY 4.0 over derived layer | Commercial reuse permitted² | Named attribution required³ | Determination date / signatory |
 |---|---|---|---|---|---|---|
 | National Integrated Bio-Big Data (KOBIC) | *Pending* | KOBIC | *Pending* | *Pending* | *Pending* | *Pending* |
-| Jeju Genome | *Pending* | Invites Genomics | *Pending* | *Pending* | *Pending* | *Pending* |
+| Jeju Genome | *Pending* | InvitesGenomics | *Pending* | *Pending* | *Pending* | *Pending* |
 | Korea4K | *Pending* | KOGIC | *Pending* | *Pending* | *Pending* | *Pending* |
 | Korea10K | *Pending* | KOGIC | *Pending* | *Pending* | *Pending* | *Pending* |
 

@@ -8,7 +8,7 @@ independently generated sources.
 | Cohort | Source institution | Records | Notes |
 |---|---:|---:|---|
 | National Integrated Bio-Big Data (국가통합바이오빅데이터) | KOBIC | 4,739 | |
-| Jeju Genome | Invites Genomics | 2,987 | Geographically distinct island population; see note below |
+| Jeju Genome | InvitesGenomics | 2,987 | Geographically distinct island population; see note below |
 | Korea4K | KOGIC | 1,661 | Eligible subset of a 3,737-record cohort; see note below |
 | Korea10K | KOGIC | 1,613 | Additional production within the Korea10K project |
 | **Total** | | **11,000** | Before cross-cohort deduplication |
