@@ -78,7 +78,7 @@ The statistical caution still stands, and it is the user's to apply rather than
 the resource's to enforce. The Jeju stratum is 2,987 records against a whole
 cohort of 11,000, so a stratified estimate is noisier than the whole-cohort one
 at the same frequency. **Read `AN_jeju` before drawing a conclusion from
-`AF_jeju`**, especially below about 1 per cent, where the stratum may hold only
+`AF_jeju`**, especially below about 1 percent, where the stratum may hold only
 a handful of alternate alleles.
 
 ---
