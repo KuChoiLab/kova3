@@ -209,5 +209,5 @@ data ownership.
 - **Release announcements:** watch this repository, or see
   [docs/versioning.md](docs/versioning.md) for the announcement channels
 
-We aim to acknowledge issues within five working days. Data errata are handled
+We aim to acknowledge issues within ten working days. Data errata are handled
 under the correction policy in [docs/versioning.md](docs/versioning.md).

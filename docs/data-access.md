@@ -1,5 +1,13 @@
 # Controlled-tier data access
 
+> **Status: the controlled tier is not yet open.** Applications open once each
+> contributing institution has confirmed, in writing, that participant-level
+> data from its cohort may be redistributed under this process, including to
+> applicants outside Korea. Those determinations are recorded in
+> [data-owners.md](data-owners.md) and are currently pending for every cohort.
+> This page describes the process that will apply when the tier opens. Please do
+> not send an application before then; enquiries are welcome at any time.
+
 KOVA3 is released in two tiers.
 
 | Tier | Contents | How to get it |
@@ -74,7 +82,9 @@ determination in writing.
 **4. Data security statement.** Where the data will be stored, who will have
 access, how access is controlled, and how the data will be destroyed at the end
 of the project. Storage on personal devices or in personal cloud accounts is
-not acceptable.
+not acceptable. Include the AWS account ID or IAM principal that should receive
+the access credentials, since credentials are issued to a named principal
+rather than to a person by email.
 
 **5. Signed Data Use Agreement.** See below.
 
@@ -100,28 +110,76 @@ The agreement's substantive obligations are these.
   participants, to link the data to other datasets in order to identify
   participants, or to contact participants.
 - **Named users only.** Access is limited to the individuals listed in the
-  application. Adding a person requires written notification and approval.
+  application. Adding a person requires written notification and approval. When
+  a named user leaves the project or the institution, the principal
+  investigator notifies us within ten working days and revokes that person's
+  access.
 - **Stated purpose only.** Data may be used only for the research described in
   the approved application. A new research question requires a new application.
+  The data may not be used for any purpose relating to the identification,
+  assessment or treatment of an individual, including forensic, insurance,
+  employment and immigration purposes, and may not be used to support an
+  intellectual-property claim that would restrict research use of the data by
+  others.
 - **Security.** Data are held on institution-managed systems with access
   control, and are not placed on personal devices, personal cloud storage, or
   publicly accessible servers.
 - **Publication and attribution.** Publications and presentations arising from
-  the data must cite KOVA3 with the release version, as described in
-  [CITATION.md](../CITATION.md). No participant-level data may be included in
-  any publication, supplementary file, or public repository. Aggregate results
-  may be published freely.
-- **Destruction.** Data are destroyed at the end of the stated project period,
-  and destruction is confirmed in writing.
+  the data must cite KOVA3 with the release version and, where the work depends
+  on a particular contributing cohort, that cohort's own publication, as
+  described in [CITATION.md](../CITATION.md). No participant-level data may be
+  included in any publication, supplementary file, or public repository.
+  Aggregate results may be published freely.
+- **Destruction.** At the end of the stated project period, the
+  participant-level data and any derived data from which an individual
+  participant's information can be recovered are securely destroyed, and
+  destruction is confirmed in writing. Aggregate results, such as summary
+  statistics and model parameters from which no individual's data can be
+  recovered, may be retained and used afterwards.
 - **Breach reporting.** Any actual or suspected loss, unauthorized access, or
   disclosure is reported within 72 hours.
 - **Term and revocation.** Approvals run for two years and may be renewed on
-  request. Access may be revoked for breach, and the applicant's institution
-  will be notified.
+  request. Access may be suspended or terminated immediately for breach, if the
+  consent basis of a contributing cohort changes, or if required by law, by an
+  ethics committee, or by a contributing data owner. The applicant's institution
+  is notified. Either party may also terminate on thirty days' notice.
 
-The full Data Use Agreement text will be published on this page before the first
-controlled-access release. This section summarizes its terms; the signed document
-governs.
+### Liability
+
+KOVA3 is supplied without charge and "as is". The agreement excludes the Data
+Provider's liability to the recipient institution and its users for loss
+arising out of the data or the agreement, including errors or omissions in the
+data, interruption or withdrawal of access, and decisions taken in reliance on
+the data; a capped liability applies as a fallback if that exclusion is held
+unenforceable. Liability for wilful misconduct, gross negligence, fraud, and
+death or personal injury is not excluded. Neither party indemnifies the other:
+each is responsible for its own acts under applicable law. Nothing in the
+agreement limits the recipient institution's liability to third parties,
+including research participants, contributing institutions and supervisory
+authorities, arising from its own breach.
+
+### Governing law and disputes
+
+The agreement is governed by the laws of the Republic of Korea. Disputes go
+first to good-faith negotiation, and then to arbitration before KCAB
+International, seated in Seoul, conducted in English before a single
+arbitrator. Where the recipient institution is established in Korea,
+arbitration does not apply and the Seoul Central District Court has exclusive
+jurisdiction at first instance. Either party may seek urgent interim or
+injunctive relief from any competent court, including courts where the
+institution is established or the data are held.
+
+Institutions that cannot accept this default, such as public bodies without
+authority to agree to arbitration or institutions required by their own
+governing law to submit to a particular court, should say so when applying. The
+agreement allows an alternative forum where both parties agree in writing.
+
+### The agreement text
+
+A full draft exists and is under legal review. The version published on this
+page before the first controlled-access release is the one that governs; the
+summary above is provided so that institutional signatories can assess the terms
+early, and it does not replace the signed document.
 
 ---
 

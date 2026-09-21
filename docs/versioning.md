@@ -65,7 +65,7 @@ Open an issue in this repository describing the affected variants or region,
 the expected and observed values, and how the discrepancy was found. Include
 the release tag.
 
-We aim to acknowledge within five working days.
+We aim to acknowledge within ten working days.
 
 ### How corrections are handled
 
