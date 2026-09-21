@@ -81,7 +81,7 @@ where they cannot be computed. A null means not calculable, not zero.
 > **TODO:** add the allelic-balance columns (`gabhom`, `gabhet`, `gabhetp`) if
 > allelic depth was imported during aggregation, and decide whether the
 > unprefixed per-batch fields are carried through at all; see
-> [data-dictionary.md](data-dictionary.md#batch-level-counterparts).
+> [data-dictionary.md](data-dictionary.md#batch-level-fields-are-not-published).
 
 > **TODO:** enumerate the stratified columns explicitly once
 > [subpopulations.md](subpopulations.md) is finalized, and add the quality
@@ -94,7 +94,7 @@ where they cannot be computed. A null means not calculable, not zero.
 -- Korean allele frequencies for a gene interval.
 -- Partition pruning limits the scan to the blocks overlapping the region.
 SELECT variant_id, ref, alt, ac, an, af, nhomalt
-FROM kova3.sites
+FROM kova3.sites_v3_0_0
 WHERE chromosome = 'chr17'
   AND pos BETWEEN 43044295 AND 43125364
   AND af < 0.01
@@ -106,7 +106,7 @@ ORDER BY pos;
 -- Look up a specific variant list. Restricting the columns selected keeps
 -- bytes scanned low, since Parquet reads only the requested columns.
 SELECT variant_id, af, an
-FROM kova3.sites
+FROM kova3.sites_v3_0_0
 WHERE variant_id IN ('chr17-43093464-A-G', 'chr13-32340301-G-A');
 ```
 

@@ -9,7 +9,7 @@ without the version.
 ```
 Korean Variant Archive 3 (KOVA3), release vX.Y.Z.
 Choi Laboratory, Korea University College of Medicine.
-Registry of Open Data on AWS: TODO-registry-url
+Registry of Open Data on AWS: https://registry.opendata.aws/kova3/ (live at launch)
 ```
 
 > **TODO:** replace with the final citation once the accompanying publication

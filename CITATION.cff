@@ -7,12 +7,13 @@ abstract: >-
   allele numbers, allele frequencies, homozygote counts, call rates, filters, and
   callability) derived from a uniformly joint-genotyped whole-genome callset.
 type: dataset
-version: "TODO"          # e.g. v3.0.0 — set at first release
-date-released: "TODO"    # YYYY-MM-DD — set at first release
 license: CC-BY-4.0
 url: "https://github.com/KuChoiLab/kova3"
-# TODO: add the Registry of Open Data on AWS landing-page URL and a dataset DOI
-#       (e.g. a Zenodo deposit) once the first versioned release is published.
+repository: "https://registry.opendata.aws/kova3/"
+# `version` and `date-released` are deliberately absent: they are optional in
+# CFF 1.2.0, and a placeholder value would make this file invalid and break the
+# "Cite this repository" button. Add both at the first release.
+# TODO: add a dataset DOI (for example a Zenodo deposit) at the first release.
 authors:
   - name: "Choi Laboratory, Korea University College of Medicine"
     website: "https://choi.korea.ac.kr/"

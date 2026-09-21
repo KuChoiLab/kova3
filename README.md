@@ -17,7 +17,7 @@ layer holding the participant-level sequencing data.
 ### What KOVA3 is
 
 KOVA3 is a Korean genome resource derived from whole-genome sequencing of
-11,008 cohort records. Its **open tier** is an openly licensed, population-level
+11,000 cohort records. Its **open tier** is an openly licensed, population-level
 allele-frequency callset: for each variant site it reports how often the
 alternate allele is observed in this Korean cohort, together with the
 information needed to interpret that number responsibly. Its **controlled
@@ -41,6 +41,11 @@ burden for Korean patients.
 | Callability resources | Per-site call rate and allele-number tracks |
 | Aggregate metadata | Cohort-level descriptions in TSV/Parquet |
 | Documentation | This repository, plus JSON schemas and release manifests |
+
+The open tier is expected to contain approximately **100 to 115 million variant
+sites**. This is an estimate from the joint genotyping run in progress; the exact
+count for a release is published in that release's `manifest.json` and recorded
+in [CHANGELOG.md](CHANGELOG.md).
 
 Per-site fields include cohort allele count (`AC`), allele number (`AN`),
 allele frequency (`AF`), homozygote count (`nhomalt`), call rate
@@ -112,13 +117,23 @@ Annotate your own VCF with Korean allele frequencies:
 
 ```bash
 # Add KOVA3 cohort allele counts and frequencies to an existing patient VCF.
-# AC, AN and AF are cohort-wide across all 11,008 genomes; see docs/data-dictionary.md.
+#
+# Note the ":=" renaming. KOVA3 publishes its frequencies under the standard
+# names AC, AN and AF, and your patient VCF almost certainly has fields of the
+# same name describing your own cohort. Annotating without renaming would
+# overwrite them. Prefix them on the way in and both survive.
 bcftools annotate \
   -a https://kova3-open.s3.ap-northeast-2.amazonaws.com/data/release=v3.0.0/sites_vcf/kova3.chr17.sites.vcf.gz \
-  -c INFO/AC,INFO/AN,INFO/AF,INFO/nhomalt \
+  -c 'INFO/KOVA3_AC:=INFO/AC,INFO/KOVA3_AN:=INFO/AN,INFO/KOVA3_AF:=INFO/AF,INFO/KOVA3_nhomalt:=INFO/nhomalt' \
   -O z -o patient.kova3.vcf.gz \
   patient.vcf.gz
+
+# Then filter on the Korean frequency without touching your own:
+bcftools view -i 'INFO/KOVA3_AF < 0.01 || INFO/KOVA3_AF = "."' patient.kova3.vcf.gz
 ```
+
+Both VCFs must be normalized the same way for the annotation to land on the
+right rows; see [variant representation](docs/data-dictionary.md#variant-representation-conventions).
 
 Load the Hail Table:
 

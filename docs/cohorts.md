@@ -2,16 +2,38 @@
 
 ## Cohort composition
 
-KOVA3 integrates **11,008 Korean whole-genome cohort records** from four
+KOVA3 integrates **11,000 Korean whole-genome cohort records** from four
 independently generated sources.
 
 | Cohort | Source institution | Records | Notes |
 |---|---:|---:|---|
 | National Integrated Bio-Big Data (국통바빅) | KOBIC | 4,739 | |
-| Jeju Genome | Invites Genomics | 2,993 | Geographically distinct island population |
-| Korea4K | KOGIC | 1,663 | Subset of a 3,737-record cohort |
+| Jeju Genome | Invites Genomics | 2,987 | Geographically distinct island population; see note below |
+| Korea4K | KOGIC | 1,661 | Subset of a 3,737-record cohort; see note below |
 | Korea10K | KOGIC | 1,613 | Additional production within the Korea10K project |
-| **Total** | | **11,008** | Before cross-cohort deduplication |
+| **Total** | | **11,000** | Before cross-cohort deduplication |
+
+Two cohorts contribute fewer records than their first-quoted size, for
+different reasons, and both exclusions are final.
+
+The Jeju Genome cohort was assembled as 2,993 records. **Six** were found to
+disagree with their accompanying metadata and were excluded before transfer, so
+2,987 were delivered and are the number KOVA3 carries. The delivered inventory
+was reconciled against that figure: none of the six appears in it.
+
+From Korea4K, **two** participants had not consented to broad secondary use of
+their data. They are excluded from every tier of KOVA3: from the joint
+genotyping that produces the open-tier frequencies, and from the controlled
+tier. The contribution is therefore 1,661, not 1,663.
+
+The identifiers excluded from both cohorts are held in the project's internal
+exclusion list and are deliberately not published here: naming them would
+disclose a participant-level consent or quality status about people who are not
+otherwise identifiable in this resource. The list is used as an input to the
+release gate, so that an excluded record cannot reach either tier unnoticed.
+
+Published material that quotes 2,993, 1,663, or a total of 11,008 or 11,002
+predates these exclusions.
 
 ### Read-level data held per cohort
 
@@ -20,13 +42,28 @@ sample. This determines what a controlled-tier applicant receives.
 
 | Cohort | Records | FASTQ | CRAM | Notes |
 |---|---:|---|---|---|
-| National Integrated Bio-Big Data (KOBIC) | 4,739 | | Yes | |
-| Jeju Genome | 2,993 | | Yes | |
-| Korea4K | 1,663 | Mixed | Mixed | 1,005 samples FASTQ only, 637 CRAM only, 21 both |
+| National Integrated Bio-Big Data (KOBIC) | 4,739 | | Yes | Format holdings not yet verified against the delivered inventory |
+| Jeju Genome | 2,987 | | Yes | Aligned CRAM with CRAI for every sample |
+| Korea4K | 1,661 | Yes | Yes | FASTQ and aligned CRAM both held; see below |
 | Korea10K | 1,613 | Yes | | No CRAM exists for this cohort |
 
+**All CRAM published in the controlled tier is aligned.** It is coordinate-sorted
+against GRCh38 and carries a CRAI index, so a single locus can be streamed
+without downloading the file. Korea4K CRAM is DRAGEN 4.2.4 output against an
+alt-masked GRCh38; Jeju CRAM arrives aligned and indexed from the sequencing
+provider.
+
+Korea4K also exists as unaligned CRAM, the original EGA deposit, and that is
+**not** what KOVA3 publishes. The distinction is not visible in the filename:
+a substantial number of the aligned DRAGEN outputs are still called
+`*_unaligned.cram`, because DRAGEN was invoked with
+`--output-file-prefix` set to the input basename. Selecting or excluding files
+by that substring gets the answer wrong in both directions. The published
+objects are renamed to `<SAMPLE>.cram` at upload, and the per-sample manifest
+records the source path.
+
 Per-sample gVCF exists for every cohort. The genotyped multi-sample VCF covers
-all 11,008 records. A per-sample manifest published with the controlled tier
+all 11,000 records. A per-sample manifest published with the controlled tier
 states exactly which formats exist for each sample; see
 [file-tree.md](file-tree.md).
 
@@ -132,8 +169,9 @@ Published alongside the callset, at cohort level only:
 > each cohort, and confirm that publishing per-cohort sample counts and
 > coverage statistics is permitted under each data provision agreement.
 
-No participant-level metadata is published in the open tier: not age, not sex at
-individual resolution, not phenotype, not recruitment site, and no other field
-that could contribute to re-identification. Controlled-tier recipients receive
-only the metadata their approved protocol requires, under the terms of the Data
-Use Agreement.
+No participant-level metadata is published in **either tier**: not age, not sex
+at individual resolution, not phenotype, not recruitment site, and no other
+field that could contribute to re-identification. Controlled-tier recipients
+receive the sequencing data and the per-sample file manifest, and nothing else.
+An analysis that requires participant characteristics cannot be served by KOVA3
+as released; enquire before applying.

@@ -15,7 +15,11 @@ Checks performed
   5. INFO keys used in the body are all declared in ##INFO headers, and the
      allow-list (if given) is respected, so that no unexpected field slips in.
   6. Optional: the set of sample IDs from --sample-list must not appear anywhere
-     in the file (header or body).
+     in the file (header or body). This is the authoritative check. The ID
+     regexes in LEAK_PATTERNS cover the shapes seen in the delivered cohorts
+     (KOREA4K-nnnn, KOREA10K-KOBIC-nnnnn, Jeju 10- and 14-digit IDs and the
+     26-character ICA barcode), but they are a safety net, not a substitute:
+     always pass --sample-list with the real ID list for the release.
 
 Exit code 0 = PASS, 1 = FAIL (details on stderr), 2 = usage error.
 
@@ -48,7 +52,13 @@ LEAK_PATTERNS = {
     "e-mail address": re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+"),
     "hostname or IP": re.compile(r"\b(\d{1,3}\.){3}\d{1,3}\b|\b[\w-]+\.(korea\.ac\.kr|kobic\.re\.kr|amazonaws\.com|kakaoi?cloud\.com)\b", re.I),
     "AWS account-like 12-digit id": re.compile(r"(?<![\d.])\d{12}(?![\d.])"),
-    "sample-ID-like 10-digit token": re.compile(r"(?<![\d.])\d{10}(?![\d.])"),
+    # Cohort sample-ID shapes as they actually appear in the delivered inventories.
+    # These are a safety net only: --sample-list is the authoritative check, and
+    # a new cohort will have a shape none of these patterns knows about.
+    "Korea4K sample ID": re.compile(r"\bKOREA4K-\d{2,5}\b", re.I),
+    "Korea10K sample ID": re.compile(r"\bKOREA10K-KOBIC-\d{4,6}\b", re.I),
+    "Jeju sample ID (bare digits)": re.compile(r"(?<![\d.])\d{10}(?![\d.])|(?<![\d.])\d{14}(?![\d.])"),
+    "Jeju sample ID (ICA barcode)": re.compile(r"\b\d{11}S\d{2}B\d[A-Z0-9]{9,12}\b"),
     "ICA/UUID identifier": re.compile(r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b", re.I),
 }
 # Header keys that legitimately contain numbers or paths and should not trip the ID heuristics

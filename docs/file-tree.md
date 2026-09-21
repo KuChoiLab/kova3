@@ -84,8 +84,8 @@ s3://kova3-controlled/
 │       └── <SAMPLE>_R2.fastq.gz
 │
 ├── cram/
-│   └── <COHORT>/<SAMPLE>/             # CRAM 3.0 against GRCh38
-│       ├── <SAMPLE>.cram
+│   └── <COHORT>/<SAMPLE>/             # Aligned, coordinate-sorted CRAM 3.0 on GRCh38
+│       ├── <SAMPLE>.cram              # Renamed at upload; see cohorts.md
 │       └── <SAMPLE>.cram.crai
 │
 ├── gvcf/
@@ -160,7 +160,7 @@ object with its size and checksum.
   "release": "v3.0.0",
   "released": "TODO-YYYY-MM-DD",
   "reference_genome": "GRCh38",
-  "n_records_contributed": 11008,
+  "n_records_contributed": 11000,
   "n_unrelated": null,
   "pipeline": {
     "joint_genotyper": "DRAGEN IGG TODO-version",

@@ -59,6 +59,28 @@ Because the batch-level fields are removed before publication, the published
 `AC`, `AN`, `AF`, `NS`, `NS_GT`, `NS_NOGT` and `NS_NODATA` are unambiguous: they
 are always the cohort-wide values.
 
+### Rename when annotating another VCF
+
+Standard names are the right choice inside a KOVA3 file, but they collide the
+moment you annotate a VCF that has its own. A patient or cohort VCF almost
+always carries `AC`, `AN` and `AF` describing that cohort, and
+
+```bash
+bcftools annotate -a kova3.chr17.sites.vcf.gz -c INFO/AC,INFO/AN,INFO/AF patient.vcf.gz
+```
+
+**overwrites them**, silently replacing your own allele counts with Korean ones.
+Rename on the way in instead:
+
+```bash
+bcftools annotate -a kova3.chr17.sites.vcf.gz \
+  -c 'INFO/KOVA3_AC:=INFO/AC,INFO/KOVA3_AN:=INFO/AN,INFO/KOVA3_AF:=INFO/AF,INFO/KOVA3_nhomalt:=INFO/nhomalt' \
+  patient.vcf.gz
+```
+
+The same applies to any other frequency resource you annotate alongside KOVA3:
+give each one a prefix, or the last one written wins.
+
 > **TODO, before launch.** The field list below is taken from the DRAGEN v4.4
 > iGG documentation. Confirm it against the header of the produced callset,
 > since the emitted set depends on the DRAGEN version and on the
@@ -141,7 +163,7 @@ population meaning, and are a predictable source of error: a user who filtered
 on them would believe they were filtering on the Korean frequency.
 
 **KOVA3 removes them during export.** The `AC`, `AN` and `AF` published in the
-open tier are always the cohort-wide values across all 11,008 genomes. The
+open tier are always the cohort-wide values across all 11,000 genomes. The
 export step is checked by the release gate
 [`scripts/verify_sites_only.py`](../scripts/verify_sites_only.py), which fails
 the release if any INFO key outside the published allow-list appears in the
@@ -242,9 +264,10 @@ The required order is:
 |---|---|
 | `PASS` | Site passed all filters |
 
-iGG applies hard filters to global metrics (`QUAL`, `NS_GT`, `GIC`, `GHWEc2`,
-and `GABHetP` are the available filtering criteria. Filtering is per-site, so
-SNVs and indels cannot be filtered separately as they can in the variant caller.
+iGG applies hard filters to cohort-wide metrics. `QUAL`, `NS_GT`, `GIC`,
+`GHWEc2` and `GABHetP` are the available filtering criteria. Filtering is
+per-site, so SNVs and indels cannot be filtered separately as they can in the
+variant caller.
 
 > **TODO:** enumerate every non-`PASS` `FILTER` value present in the export with
 > its definition and the threshold applied, and state in
@@ -256,18 +279,36 @@ SNVs and indels cannot be filtered separately as they can in the variant caller.
 
 ## Variant representation conventions
 
-- Indels are left-aligned and normalized against the GRCh38 reference
-- Variant classes included: single-nucleotide variants and short insertions and
-  deletions
+**One row is one alternate allele.** Multi-allelic sites are split before
+publication, so every record in the sites-only VCF carries a single ALT, and
+every row of the Parquet and Hail layers is one variant allele. This is the
+convention gnomAD and most frequency resources use, and it is what makes a join
+on `(chromosome, pos, ref, alt)` unambiguous. It also means the number of
+records is larger than the number of genomic positions.
+
+Indels are left-aligned and normalized against the GRCh38 reference. Variant
+classes included are single-nucleotide variants and short insertions and
+deletions.
+
+The split and normalization are a single step:
+
+```bash
+bcftools norm -m -any -f <GRCh38 reference FASTA> input.vcf.gz -Oz -o normalized.vcf.gz
+```
+
+`-m -any` splits multi-allelic records; `-f` supplies the reference needed for
+left-alignment. Splitting matters more than usual here because several fields
+above are `Number=A` or `Number=R`: `bcftools norm` carries the correct element
+of each such field to each split record, which is why the split is done with it
+rather than by hand.
+
+**If you compare KOVA3 against another resource, normalize both the same way.**
+An unsplit multi-allelic record on either side will not join, and a
+differently-left-aligned indel will join to the wrong row or to none.
 
 > **TODO:** confirm and document:
 >
-> - whether multi-allelic sites are split into one record per alternate allele,
->   and with what command. This matters more than usual here: several fields
->   above are `Number=A` or `Number=R`, so splitting must carry the right
->   element to each record
-> - the normalization tool and command used (for example
->   `bcftools norm -m -any -f <ref>`)
+> - the exact reference FASTA passed to `-f`, once methods.md records it
 > - any upper size limit on indels
 > - that structural variants, copy-number variants, and short tandem repeats are
 >   **not** included in this release

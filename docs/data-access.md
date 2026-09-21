@@ -163,7 +163,8 @@ necessary for most analyses nor practical.
 Read-level format varies by cohort and by sample. Some samples have CRAM, some
 have FASTQ, and some have both. A per-sample manifest published with the
 release states which formats exist for each sample; consult it when planning an
-analysis. Where CRAM is aligned, CRAI indexes allow streaming a single locus.
+analysis. All published CRAM is aligned to GRCh38 and carries a CRAI index, so
+a single locus can be streamed without downloading the file.
 
 ---
 

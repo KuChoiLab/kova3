@@ -128,4 +128,4 @@ See [CHANGELOG.md](../CHANGELOG.md).
 
 | Release | Date | Records | Notes |
 |---|---|---:|---|
-| `v3.0.0` | not yet published | 11,008 | Initial KOVA3 release |
+| `v3.0.0` | not yet published | 11,000 | Initial KOVA3 release |
