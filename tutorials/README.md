@@ -2,14 +2,19 @@
 
 Reproducible notebooks showing how to use KOVA3 with AWS services.
 
-> **Not yet published.** These will be released alongside the first versioned
-> KOVA3 release. See [CHANGELOG.md](../CHANGELOG.md) for release status.
+> **Status.** Notebook 1 is published as a draft: it is written against the
+> release layout, but the open-tier bucket does not exist yet, so its cells carry
+> no outputs. Notebooks 2 to 5 are planned and will be released alongside the
+> first versioned KOVA3 release. See [CHANGELOG.md](../CHANGELOG.md).
+>
+> The AWS Open Data "Get To Know A Dataset" notebook for KOVA3 lives in a
+> separate repository:
+> [seungsookim-99/open-data-examples](https://github.com/seungsookim-99/open-data-examples/blob/main/kova3/get-to-know-a-dataset.ipynb).
 
-## Planned notebooks
+## Notebooks
 
-Each notebook is based on the AWS Open Data "Get To Know A Dataset" template and
-states its expected output, runtime, bytes scanned, approximate user cost, and
-the pinned KOVA3 release version.
+Each notebook states its expected output, runtime, bytes scanned, approximate
+user cost, and the pinned KOVA3 release version.
 
 | # | Notebook | Covers |
 |---|---|---|
@@ -24,5 +29,6 @@ an approved application; see [docs/data-access.md](../docs/data-access.md).
 
 ## Community challenge
 
-Compare a candidate variant list for a Korean rare disease case before and after
-filtering on KOVA3 frequencies, and report how the candidate count changes.
+The KOVA3 community challenge is posed in the
+[Get To Know A Dataset notebook](https://github.com/seungsookim-99/open-data-examples/blob/main/kova3/get-to-know-a-dataset.ipynb).
+If you take it on, open an issue on this repository with what you find.

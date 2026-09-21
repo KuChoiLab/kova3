@@ -8,9 +8,9 @@ belongs to one of them.
 | `all` | Every included sample | `AC`, `AN`, `AF`, `nhomalt` |
 | `jeju` | Samples from the Jeju Genome cohort | `AC_jeju`, `AN_jeju`, `AF_jeju`, `nhomalt_jeju` |
 
-**The `all` stratum has no `_all` suffix.** Its fields are the `G`-prefixed
-DRAGEN fields, which are already cohort-wide by definition, so adding a suffixed
-duplicate would publish the same numbers twice under two names. This follows the
+**The `all` stratum has no `_all` suffix.** Its fields are the unsuffixed
+cohort-wide fields, so adding a suffixed duplicate would publish the same numbers
+twice under two names. This follows the
 convention used by gnomAD and other frequency resources, where the overall
 figures are unsuffixed and only subpopulations carry a suffix.
 

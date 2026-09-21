@@ -33,6 +33,7 @@ s3://kova3-open/
 │   └── schemas/
 │       ├── parquet_schema.json
 │       ├── hail_schema.json
+│       ├── athena_create_table.sql    # CREATE EXTERNAL TABLE over the Parquet layer
 │       └── vcf_header.txt
 │
 └── data/

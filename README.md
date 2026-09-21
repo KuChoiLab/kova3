@@ -43,10 +43,12 @@ burden for Korean patients.
 | Documentation | This repository, plus JSON schemas and release manifests |
 
 Per-site fields include cohort allele count (`AC`), allele number (`AN`),
-allele frequency (`AF`), homozygote count, call rate, Hardy-Weinberg and
-allelic-balance statistics, and quality filters. Fields are published under the
-names DRAGEN emits, with a `G` prefix marking cohort-wide values. See the
-[data dictionary](docs/data-dictionary.md).
+allele frequency (`AF`), homozygote count (`nhomalt`), call rate
+(`call_rate`), Hardy-Weinberg and allelic-balance statistics, and quality
+filters. The frequency fields use the names standard across population
+frequency resources, so a pipeline written against gnomAD reads a KOVA3 file
+unchanged. See the [data dictionary](docs/data-dictionary.md) for the full
+field list and for how these map onto the joint genotyping output.
 
 ### The controlled tier
 
@@ -110,7 +112,7 @@ Annotate your own VCF with Korean allele frequencies:
 
 ```bash
 # Add KOVA3 cohort allele counts and frequencies to an existing patient VCF.
-# The G prefix means cohort-wide; see docs/data-dictionary.md.
+# AC, AN and AF are cohort-wide across all 11,008 genomes; see docs/data-dictionary.md.
 bcftools annotate \
   -a https://kova3-open.s3.ap-northeast-2.amazonaws.com/data/release=v3.0.0/sites_vcf/kova3.chr17.sites.vcf.gz \
   -c INFO/AC,INFO/AN,INFO/AF,INFO/nhomalt \
@@ -130,8 +132,9 @@ ht.describe()
 More worked examples, including Amazon Athena queries against the Parquet
 layer, live in [`tutorials/`](tutorials/).
 
-> **TODO:** publish the tutorial notebooks. Each should state expected output,
-> runtime, bytes scanned, approximate user cost, and the pinned release version.
+> **TODO:** publish the remaining tutorial notebooks. Each should state expected
+> output, runtime, bytes scanned, approximate user cost, and the pinned release
+> version.
 
 ---
 

@@ -204,8 +204,8 @@ computes them from the callset before genotypes are dropped.
 | `AF_jeju` | A | Float | Alternate allele frequency within the Jeju stratum |
 | `nhomalt_jeju` | A | Integer | Homozygous alternate individuals within the Jeju stratum |
 
-The whole-cohort figures are the `G`-prefixed fields above; there is no separate
-`_all` suffix. See [subpopulations.md](subpopulations.md) for what the Jeju
+The whole-cohort figures are the unsuffixed `AC`, `AN`, `AF` and `nhomalt` above;
+there is no separate `_all` suffix. See [subpopulations.md](subpopulations.md) for what the Jeju
 stratum is and when to use it.
 
 > **TODO:** confirm the minimum stratum size policy and whether these fields are
