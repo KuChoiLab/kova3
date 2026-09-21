@@ -33,8 +33,11 @@ frequencies as well as from the controlled tier.
 The identifiers excluded from both cohorts are held in the project's internal
 exclusion list and are deliberately not published here: naming them would
 disclose a participant-level consent or quality status about people who are not
-otherwise identifiable in this resource. The list is used as an input to the
-release gate, so that an excluded record cannot reach either tier unnoticed.
+otherwise identifiable in this resource. The list is passed to the release gate
+[`scripts/verify_sites_only.py`](../scripts/verify_sites_only.py) as
+`--exclusion-list`, which fails the release if any of those identifiers appears
+anywhere in a published file, so an excluded record cannot reach either tier
+unnoticed.
 
 Published material that quotes 2,993, 1,663, or a total of 11,008 or 11,002
 predates these exclusions.

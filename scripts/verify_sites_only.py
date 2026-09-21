@@ -14,19 +14,28 @@ Checks performed
      hostnames; ICA/Kakao/AWS account-like identifiers.
   5. INFO keys used in the body are all declared in ##INFO headers, and the
      allow-list (if given) is respected, so that no unexpected field slips in.
-  6. Optional: the set of sample IDs from --sample-list must not appear anywhere
-     in the file (header or body). This is the authoritative check. The ID
-     regexes in LEAK_PATTERNS cover the shapes seen in the delivered cohorts
+  6. Optional: the set of sample IDs from --sample-list and --exclusion-list
+     must not appear anywhere
+     in the file (header or body). This is the authoritative check, and it runs
+     over every record of every file unless --max-records is set. The ID regexes
+     in LEAK_PATTERNS cover the shapes seen in the delivered cohorts
      (KOREA4K-nnnn, KOREA10K-KOBIC-nnnnn, Jeju 10- and 14-digit IDs and the
      26-character ICA barcode), but they are a safety net, not a substitute:
-     always pass --sample-list with the real ID list for the release.
+     always pass --sample-list with the real ID list for the release, and do not
+     pass --max-records on a release run.
+
+     --exclusion-list carries the participant IDs excluded from KOVA3 (consent
+     or metadata-quality exclusions). Those IDs must not appear in either tier,
+     which is what docs/cohorts.md means by the exclusion list being an input to
+     the release gate. That file is never committed; see .gitignore.
 
 Exit code 0 = PASS, 1 = FAIL (details on stderr), 2 = usage error.
 
 Usage
   python3 verify_sites_only.py release/chr21.sites.vcf.gz
-  python3 verify_sites_only.py release/*.sites.vcf.gz --sample-list samples.txt \
-      --allow-info "$KOVA3_OPEN_INFO" --max-records 0
+  python3 verify_sites_only.py release/*.sites.vcf.gz \
+      --sample-list samples.txt --exclusion-list kova3-excluded-samples.tsv \
+      --allow-info "$KOVA3_OPEN_INFO"
 
 The published open-tier INFO allow-list (see docs/data-dictionary.md) is:
 
@@ -37,6 +46,8 @@ Passing it is what catches a batch-level field or any other unexpected INFO key
 that survived export, because anything outside the list fails the run.
 
 --max-records N limits body scanning to the first N records (0 = all; default all).
+Use it for a quick smoke test only. A release run must scan every record, so leave
+it at the default; a capped run is not a release gate.
 Only the standard library is used; gzip/bgzip input is handled transparently.
 """
 import argparse
@@ -61,6 +72,20 @@ LEAK_PATTERNS = {
     "Jeju sample ID (ICA barcode)": re.compile(r"\b\d{11}S\d{2}B\d[A-Z0-9]{9,12}\b"),
     "ICA/UUID identifier": re.compile(r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b", re.I),
 }
+# Patterns that legitimately fire on structural header lines (contig lengths, dates,
+# INFO descriptions) and are therefore skipped for the prefixes listed below.
+# Keep these names in sync with LEAK_PATTERNS; a name that no longer exists here
+# silently disables the exemption.
+NUMERIC_PATTERNS_EXEMPT_ON_SAFE_HEADERS = (
+    "Jeju sample ID (bare digits)",
+    "AWS account-like 12-digit id",
+    "hostname or IP",
+)
+# Token shape used for the exact sample-ID membership test. Splitting the line into
+# tokens and intersecting with the ID set is O(line) regardless of how many IDs
+# there are; scanning the ID list per line is O(ids x lines) and does not scale to
+# a whole chromosome shard.
+SAMPLE_ID_TOKEN = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.\-]{4,}")
 # Header keys that legitimately contain numbers or paths and should not trip the ID heuristics
 SAFE_HEADER_PREFIXES = ("##contig=", "##reference=", "##fileDate=", "##INFO=", "##FILTER=", "##ALT=", "##fileformat=")
 
@@ -73,6 +98,27 @@ def open_text(path):
     return open(path, "r", encoding="utf-8", errors="replace")
 
 
+def split_ids(sample_ids):
+    """Partition the ID set by whether SAMPLE_ID_TOKEN can produce it.
+
+    The fast path intersects tokenized line content with a set, which is O(line)
+    however many IDs there are. An ID the tokenizer can never emit (too short, or
+    containing a character the token class excludes) would be silently missed by
+    that path, so those fall back to a substring scan and the caller is told.
+    """
+    fast, slow = set(), set()
+    for sid in sample_ids:
+        (fast if SAMPLE_ID_TOKEN.findall(sid) == [sid] else slow).add(sid)
+    return fast, slow
+
+
+def scan_ids(line, fast_ids, slow_ids):
+    hit = fast_ids.intersection(SAMPLE_ID_TOKEN.findall(line)) if fast_ids else set()
+    if slow_ids:
+        hit |= {sid for sid in slow_ids if sid in line}
+    return hit
+
+
 def check_file(path, sample_ids, allow_info, max_records):
     failures = []
     warnings = []
@@ -80,6 +126,8 @@ def check_file(path, sample_ids, allow_info, max_records):
     info_used = set()
     n_records = 0
     saw_chrom = False
+    truncated = False
+    fast_ids, slow_ids = split_ids(sample_ids)
 
     with open_text(path) as fh:
         for lineno, line in enumerate(fh, 1):
@@ -97,15 +145,14 @@ def check_file(path, sample_ids, allow_info, max_records):
                     continue
                 safe = line.startswith(SAFE_HEADER_PREFIXES)
                 for name, pat in LEAK_PATTERNS.items():
-                    if safe and name in ("sample-ID-like 10-digit token", "AWS account-like 12-digit id", "hostname or IP"):
+                    if safe and name in NUMERIC_PATTERNS_EXEMPT_ON_SAFE_HEADERS:
                         continue
                     if pat.search(line):
                         failures.append(f"line {lineno}: header leakage ({name}): {line[:160]}")
                 if sample_ids:
-                    for sid in sample_ids:
-                        if sid in line:
-                            failures.append(f"line {lineno}: sample ID {sid} appears in header")
-                            break
+                    hit = scan_ids(line, fast_ids, slow_ids)
+                    if hit:
+                        failures.append(f"line {lineno}: sample ID {sorted(hit)[0]} appears in header")
                 continue
             if line.startswith("#CHROM"):
                 saw_chrom = True
@@ -119,18 +166,21 @@ def check_file(path, sample_ids, allow_info, max_records):
             fields = line.split("\t")
             if len(fields) != 8:
                 failures.append(f"line {lineno}: record has {len(fields)} fields, expected 8")
-                if len(failures) > 50:
-                    failures.append("... too many failures, stopping body scan")
-                    break
             info = fields[7] if len(fields) >= 8 else ""
             for kv in info.split(";"):
                 if kv and kv != ".":
                     info_used.add(kv.split("=", 1)[0])
-            if sample_ids and n_records <= 100000:
-                for sid in sample_ids:
-                    if sid in line:
-                        failures.append(f"line {lineno}: sample ID {sid} appears in a record")
-                        break
+            # Every record is checked against the sample list, with no record cap:
+            # this is the authoritative privacy check and a partial scan would give
+            # a false assurance.
+            if sample_ids:
+                hit = scan_ids(line, fast_ids, slow_ids)
+                if hit:
+                    failures.append(f"line {lineno}: sample ID {sorted(hit)[0]} appears in a record")
+            if len(failures) > 50:
+                failures.append("... too many failures, stopping body scan")
+                truncated = True
+                break
             if max_records and n_records >= max_records:
                 break
 
@@ -144,7 +194,7 @@ def check_file(path, sample_ids, allow_info, max_records):
         if not_allowed:
             failures.append(f"INFO keys not on the allow-list: {sorted(not_allowed)}")
         unused = allow_info - info_used
-        if unused:
+        if unused and not truncated and not max_records:
             warnings.append(f"allow-listed INFO keys never used in scanned records: {sorted(unused)}")
     return failures, warnings, n_records, sorted(info_used)
 
@@ -153,14 +203,47 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("vcf", nargs="+", help="sites-only VCF file(s), plain or bgzip/gzip")
     ap.add_argument("--sample-list", help="text file with one sample ID per line; none may appear in the output")
+    ap.add_argument("--exclusion-list",
+                    help="text file of participant IDs excluded from the release (one per line, "
+                         "or TSV with the ID in the first column). Merged into --sample-list: these "
+                         "must never appear in either tier. See docs/cohorts.md.")
     ap.add_argument("--allow-info", help="comma-separated INFO keys permitted in the open tier")
     ap.add_argument("--max-records", type=int, default=0, help="scan at most N records per file (0 = all)")
     args = ap.parse_args()
 
-    sample_ids = []
+    def read_ids(path, first_column=False):
+        ids = set()
+        with open(path) as fh:
+            for raw in fh:
+                raw = raw.strip()
+                if not raw or raw.startswith("#"):
+                    continue
+                ids.add(raw.split("\t", 1)[0].strip() if first_column else raw)
+        if not ids:
+            print(f"{path} contains no sample IDs", file=sys.stderr)
+            sys.exit(2)
+        return ids
+
+    sample_ids = set()
     if args.sample_list:
-        with open(args.sample_list) as fh:
-            sample_ids = [s.strip() for s in fh if s.strip()]
+        sample_ids |= read_ids(args.sample_list)
+    if args.exclusion_list:
+        excluded = read_ids(args.exclusion_list, first_column=True)
+        sample_ids |= excluded
+        print(f"exclusion list: {len(excluded)} participant IDs added to the scan", file=sys.stderr)
+
+    if sample_ids:
+        _, unmatchable = split_ids(sample_ids)
+        if unmatchable:
+            print(f"note: {len(unmatchable)} ID(s) need the slower substring scan "
+                  f"(e.g. {sorted(unmatchable)[0]!r}); they are still checked", file=sys.stderr)
+    else:
+        print("warning: no --sample-list or --exclusion-list given; the authoritative "
+              "ID check is NOT running, only the shape heuristics", file=sys.stderr)
+
+    if args.max_records:
+        print(f"warning: --max-records {args.max_records} is set; this is a smoke test, "
+              "not a release gate", file=sys.stderr)
     allow_info = set(args.allow_info.split(",")) if args.allow_info else None
 
     overall_fail = False
