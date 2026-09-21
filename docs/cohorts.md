@@ -9,7 +9,7 @@ independently generated sources.
 |---|---:|---:|---|
 | National Integrated Bio-Big Data (국통바빅) | KOBIC | 4,739 | |
 | Jeju Genome | Invites Genomics | 2,987 | Geographically distinct island population; see note below |
-| Korea4K | KOGIC | 1,661 | Subset of a 3,737-record cohort; see note below |
+| Korea4K | KOGIC | 1,661 | Eligible subset of a 3,737-record cohort; see note below |
 | Korea10K | KOGIC | 1,613 | Additional production within the Korea10K project |
 | **Total** | | **11,000** | Before cross-cohort deduplication |
 
@@ -21,10 +21,17 @@ disagree with their accompanying metadata and were excluded before transfer, so
 2,987 were delivered and are the number KOVA3 carries. The delivered inventory
 was reconciled against that figure: none of the six appears in it.
 
-From Korea4K, **two** participants had not consented to broad secondary use of
-their data. They are excluded from every tier of KOVA3: from the joint
-genotyping that produces the open-tier frequencies, and from the controlled
-tier. The contribution is therefore 1,661, not 1,663.
+Korea4K as a whole is 3,737 records, and KOVA3 takes the subset that meets two
+conditions at once: the participant is a healthy control, and their consent
+covers secondary provision of the data to a third party. Records failing either
+condition are not eligible for KOVA3 regardless of data quality. **1,661**
+records meet both, and that is the contribution KOVA3 carries.
+
+Two participants who would otherwise have qualified were found during that
+screen not to have consented to broad secondary use. They are excluded from
+every tier of KOVA3: from the joint genotyping that produces the open-tier
+frequencies, and from the controlled tier. The contribution is therefore 1,661,
+not 1,663.
 
 The identifiers excluded from both cohorts are held in the project's internal
 exclusion list and are deliberately not published here: naming them would
@@ -132,11 +139,18 @@ table is the governance evidence behind that determination.
 | Korea4K | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
 | Korea10K | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
 
-> **Status: blocking before submission and launch.** Every row is `Pending`.
-> Until a cohort's row is fully confirmed in writing (evidence held on file by
-> the Choi Laboratory and the institutional legal/IRB office), that cohort
-> **cannot** be included in the release or in the allele-number denominators.
-> Record the approval numbers directly in the table when obtained.
+> **Status: outstanding, and blocking the first data release.** Every row is
+> `Pending`. The analysis that produces KOVA3 is carried out under institutional
+> ethics approval held by the Choi Laboratory and by the providing institutions,
+> and each contributing cohort was collected under its own approved protocol.
+> Approval to analyse is not the same as written confirmation that a cohort's
+> consent permits unrestricted public aggregate release, which is what this
+> table records. Until a cohort's row is fully confirmed in writing (evidence
+> held on file by the Choi Laboratory and the institutional legal/IRB office),
+> that cohort **cannot** be included in the release or in the allele-number
+> denominators. Record each approval reference directly in the table when
+> obtained. Registering the resource and publishing this documentation do not
+> depend on the table; publishing data does.
 
 ### Summary of the position taken
 

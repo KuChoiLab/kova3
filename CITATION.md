@@ -18,8 +18,9 @@ Registry of Open Data on AWS: https://registry.opendata.aws/kova3/ (live at laun
 
 A Citation File Format entry is provided at the repository root
 ([CITATION.cff](CITATION.cff)); GitHub uses it to render a **"Cite this
-repository"** button. The `version` and `date-released` fields, the Registry of
-Open Data URL, and a dataset DOI are filled in at first release.
+repository"** button. It already carries the Registry of Open Data URL. The
+`version` and `date-released` fields, and a dataset DOI, are added at first
+release.
 
 ## Citing the predecessors
 

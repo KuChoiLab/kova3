@@ -125,12 +125,14 @@ the controlled tier. Exclusion from the controlled tier does not by itself
 exclude a cohort from the open tier, and the two tables are decided
 independently.
 
-> **Status: blocking before submission and launch.** Both tables above are
-> `Pending` for every cohort. They must be completed, with written evidence held
-> on file by the Choi Laboratory and the institutional legal and IRB offices,
-> before the repository URL is submitted to AWS and before any data is
-> published. Record the IRB approval reference for each cohort alongside the
-> signed determination.
+> **Status: outstanding, and blocking the first data release.** Both tables
+> above are `Pending` for every cohort. They must be completed, with written
+> evidence held on file by the Choi Laboratory and the institutional legal and
+> IRB offices, before any data is published, and the controlled-tier table
+> before any controlled-tier credential is issued. Record the IRB approval
+> reference for each cohort alongside the signed determination. Submitting the
+> repository URL and this documentation to AWS does not wait on the tables; a
+> bucket holding real data does.
 
 ---
 
