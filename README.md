@@ -145,13 +145,15 @@ ht = hl.read_table("s3://kova3-open/data/release=v3.0.0/hail/kova3.sites.ht")
 ht.describe()
 ```
 
-Worked examples live in [`tutorials/`](tutorials/). Notebook 1 is published;
-the rest, including Amazon Athena queries against the Parquet layer, follow at
-launch.
+Worked examples live in [`tutorials/`](tutorials/): streaming an interval,
+annotating your own VCF, and querying a gene panel with Amazon Athena against
+the Parquet layer.
 
-> **TODO:** publish the remaining tutorial notebooks. Each should state expected
-> output, runtime, bytes scanned, approximate user cost, and the pinned release
-> version.
+> **TODO:** run the published notebooks end to end once the buckets exist and
+> republish them with their expected output, runtime, bytes scanned and
+> approximate user cost filled in. Two further notebooks, Hail on Amazon EMR and
+> the controlled tier, are listed as planned in
+> [`tutorials/README.md`](tutorials/README.md).
 
 ---
 
