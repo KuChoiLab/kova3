@@ -126,35 +126,162 @@ away; see [batch-effect assessment](#residual-cohort-effect-assessment).
 
 ## Sample-level processing
 
+The steps below describe the procedure the Choi Lab applies. It was developed
+and validated on subsets of the cohort during 2025. Thresholds are stated
+because they are decisions; the resulting sample counts are not, because they
+are produced by the final callset and that run has not completed. Every count
+in this section is therefore marked outstanding, and
+[cohorts.md](cohorts.md#cohort-composition) carries the same list.
+
+### The QC variant set
+
+Ancestry inference and relatedness both run on a common pruned variant set
+rather than on the whole callset, because both methods need
+approximately independent, well-called, common variants.
+
+It is built in two stages. First, on the callset as a whole:
+
+| Step | Criterion |
+|---|---|
+| Site call rate | `variant_qc.call_rate >= 0.9` |
+| Low-complexity regions | Removed, against `LCR-hs38.bed` |
+
+Then, to produce the pruned set:
+
+| Step | Criterion |
+|---|---|
+| Variant class | Biallelic SNVs only (`hl.is_snp`, `hl.len(alleles) == 2`) |
+| Minor allele frequency | `hl.min(variant_qc.AF) > 0.001` |
+| Site call rate | `variant_qc.call_rate > 0.99` |
+| Hardy-Weinberg | `variant_qc.p_value_hwe > 1e-8` |
+| Inbreeding coefficient | `info.IC > -0.025`, taken from the DRAGEN `IC` field rather than recomputed |
+| Linkage disequilibrium | `hl.ld_prune(mt.GT, r2=0.1, bp_window_size=100000)`, run per autosome and unioned |
+
+The LD pruning is run one autosome at a time and the results concatenated;
+running it genome-wide in one call exhausts memory at this cohort size.
+
+> **TODO:** report the number of variants surviving each step for the
+> production callset.
+
 ### Duplicate removal
 
-Records contributed by more than one cohort are identified and retained once.
+**Duplicates are not detected by a separate step.** A duplicate pair sits far
+above the relatedness threshold applied below, so it is removed by the
+relatedness pruning along with first- and second-degree relatives, and the
+record retained is chosen by the same rule.
 
-> **TODO:** document the method (for example, genotype concordance across a
-> common SNP set, or `KING` kinship above the duplicate threshold), the
-> threshold applied, and which cohort's record is retained when duplicates are
-> found. Report the number of duplicates removed per cohort pair.
+> **TODO:** report the number of duplicate pairs found, broken down by cohort
+> pair, for the production callset.
 
 ### Ancestry inference
 
-> **TODO:** document the method (for example, PCA projection onto a reference
-> panel such as 1000 Genomes or HGDP), the variant set used, and the criteria
-> for retaining or excluding samples on ancestry grounds. State explicitly
-> whether non-Korean-ancestry samples are excluded, and how many were removed.
+Ancestry is inferred in two stages, both by **projection onto a reference
+panel** rather than by a joint principal-component analysis of reference and
+cohort together. Principal components are computed on the reference alone and
+the cohort is projected into that space, so adding or removing cohort samples
+cannot move the reference axes.
+
+Principal components are computed on the reference panel alone with Hail's
+`hwe_normalized_pca`, retaining the loadings, at **k = 20**. The cohort is then
+projected into that space with `hl.experimental.pc_project`, using the
+reference panel's own allele frequencies as the projection frequencies. Both
+stages use twenty principal components.
+
+**Stage 1, continental ancestry.** The reference is the gnomAD v3.1 HGDP and
+1000 Genomes callset, restricted to the unrelated samples without outliers
+(`hgdp_1kg_v2/pca_results/unrelateds_without_outliers`). Samples whose
+superpopulation label is missing or ambiguous are dropped, leaving roughly
+2,500 reference samples across AFR, AMR, EAS, EUR and SAS. Cohort samples that
+do not project into the East Asian cluster are excluded.
+
+**Stage 2, East Asian substructure.** The East Asian samples are then projected
+against 1000 Genomes phase 3 East Asian samples (CHB, CHS, CDX, JPT, KHV),
+filtered to `variant_qc.call_rate > 0.99`, together with a downsample of KOVA2
+as a Korean anchor. Samples projecting into a non-Korean East Asian cluster are
+excluded. Known problematic reference samples are removed from the panel before
+the analysis.
+
+Both exclusions are applied to the joint genotyping input list, so an excluded
+sample contributes to no allele number anywhere in the release.
+
+> **TODO, blocking before launch.** Two things are outstanding here, and the
+> second is the more important.
+>
+> - Report the number of samples excluded at each stage for the production
+>   callset.
+> - **Publish the rule that assigns a projected sample to a cluster.** In the
+>   development runs the assignment was made by inspecting the projected
+>   principal components, without a written numeric criterion. A reproducible
+>   rule is required before release: either a distance or posterior-probability
+>   cut-off, or the gnomAD `assign_genetic_ancestry_pcs` random-forest
+>   classifier with its probability threshold stated. Say which, and state the
+>   threshold.
 
 ### Relatedness assessment
 
-> **TODO:** document the method and kinship threshold used, whether a maximal
-> unrelated set is retained or related individuals are down-weighted, and the
-> resulting number of unrelated individuals. Report both the full-cohort and
-> unrelated-subset allele numbers if both are published.
+A **maximal unrelated set** is retained. Related individuals are not
+down-weighted, and the published allele numbers are those of the retained set.
+
+The kinship coefficient is computed with **KING**. The input is the PASS-only
+single-nucleotide variants in exonic regions, converted to PLINK binary format,
+and KING is run in kinship mode with IBS statistics.
+
+**The threshold is `kinship > 0.1`**, which removes duplicates, first-degree
+and second-degree relatives while retaining third-degree and more distant
+pairs.
+
+Pruning is greedy rather than a single pass. While any pair above the
+threshold remains: take the sample or samples with the most relatedness edges;
+among those, drop the one with the **lowest fraction of the genome covered at
+10x**, using mean alignment coverage as a tie-break; recompute the remaining
+pairs. This removes the smallest number of samples that breaks every edge, and
+where the choice is arbitrary it keeps the better-sequenced record. It is also
+what resolves duplicates, as described above.
+
+Two cross-checks are run against the same cohort. The first is
+`somalier relate` (v0.3.0). The second is Hail `pc_relate`, with a minimum
+individual minor allele frequency of **0.001**, **k = 3** principal components
+and `statistics='kin20'`; pairs above the same **0.1** kinship threshold are
+then resolved with Hail's `maximal_independent_set`. `'kin20'` is used rather
+than `'kin'` because the IBS0 estimate needed to separate the relationship
+classes is not returned by `'kin'`.
+
+The two methods agree closely but not exactly, and **the KING result is the one the release
+uses**; the Hail figure is not interchangeable with it and the two must not be
+mixed in a single report.
+
+> **TODO:** report, for the production callset, the number of samples removed,
+> the number of unrelated individuals retained, and the breakdown of removed
+> pairs by inferred relationship degree.
 
 ### Sample quality control
 
-> **TODO:** list the sample-level QC metrics and thresholds applied, for
-> example call rate, mean coverage, contamination estimate, chimera rate,
-> heterozygosity, and sex-check concordance. For each, give the threshold and
-> the number of samples excluded.
+Sex chromosome ploidy is checked for every sample, and samples with a sex
+chromosome aneuploidy are excluded before joint genotyping.
+
+Per-sample metrics are computed with `hl.sample_qc` and carried through the
+pipeline: non-reference SNV and indel counts, transition/transversion ratio,
+mean genotype quality for SNVs and indels, and call rate for SNVs and indels
+separately. Per-sample coverage comes from the DRAGEN
+`wgs_coverage_metrics.csv` report, specifically the fraction of the genome at
+10x or above and the mean alignment coverage over the genome.
+
+> **TODO, blocking before launch.** This section is the least complete in this
+> document and the gap is real, not editorial.
+>
+> - **State the exclusion thresholds.** The metrics above are computed and
+>   inspected, but no numeric cut-off has been fixed for per-sample call rate,
+>   mean coverage, transition/transversion ratio or mean genotype quality. Fix
+>   them, state them here, and report how many samples each removes.
+> - **State the sex-imputation method** behind the aneuploidy calls: the
+>   statistic used, its threshold, and how a sex-check discordance between the
+>   imputed and the recorded sex is resolved.
+> - **Add contamination and chimera-rate screening, or say why not.**
+>   Neither a contamination estimate nor a chimera rate is currently applied.
+>   Both are standard for a population reference and both are available from
+>   the DRAGEN per-sample reports.
+> - Record the versions of KING, PLINK, VCFtools, BCFtools and Hail used in
+>   the production run. Only `somalier` (v0.3.0) is currently pinned.
 
 ---
 
