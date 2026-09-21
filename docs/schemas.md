@@ -66,10 +66,10 @@ aligned with the sites-only VCF. See
 | `ns_nodata` | INT32 | no | Samples with no coverage |
 | `nhomalt` | INT32 | no | Homozygous alternate individuals (derived) |
 | `call_rate` | FLOAT | no | Call rate (derived) |
-| `gic` | FLOAT | yes | Inbreeding coefficient |
-| `ghwec2` | FLOAT | yes | Hardy-Weinberg P-value, site-wise |
-| `ghwe` | FLOAT | yes | Hardy-Weinberg P-value, allele-wise |
-| `gexchet` | FLOAT | yes | Excess heterozygosity P-value |
+| `ic` | FLOAT | yes | Inbreeding coefficient |
+| `hwec2` | FLOAT | yes | Hardy-Weinberg P-value, site-wise |
+| `hwe` | FLOAT | yes | Hardy-Weinberg P-value, allele-wise |
+| `exchet` | FLOAT | yes | Excess heterozygosity P-value |
 | `ac_jeju` | INT32 | yes | Alternate allele count, Jeju stratum |
 | `an_jeju` | INT32 | yes | Called allele number, Jeju stratum |
 | `af_jeju` | DOUBLE | yes | Alternate allele frequency, Jeju stratum |
@@ -77,11 +77,6 @@ aligned with the sites-only VCF. See
 
 Quality-control columns are nullable because DRAGEN omits these fields at sites
 where they cannot be computed. A null means not calculable, not zero.
-
-> **TODO:** add the allelic-balance columns (`gabhom`, `gabhet`, `gabhetp`) if
-> allelic depth was imported during aggregation, and decide whether the
-> unprefixed per-batch fields are carried through at all; see
-> [data-dictionary.md](data-dictionary.md#batch-level-fields-are-not-published).
 
 > **TODO:** enumerate the stratified columns explicitly once
 > [subpopulations.md](subpopulations.md) is finalized, and add the quality
@@ -99,6 +94,8 @@ WHERE chromosome = 'chr17'
   AND pos BETWEEN 43044295 AND 43125364
   AND af < 0.01
   AND an > 15000          -- require adequate power before trusting a low frequency
+                          -- 11,000 samples means an <= 22000 on the autosomes,
+                          -- so 15000 is a call rate of about 0.68
 ORDER BY pos;
 ```
 
@@ -140,13 +137,18 @@ Row fields:
         AF: float64,
         NS: int32,
         NS_GT: int32,
-        GIC: float64,
-        GHWEc2: float64,
+        NS_NOGT: int32,
+        NS_NODATA: int32,
+        IC: float64,
+        HWEc2: float64,
+        HWE: float64,
+        ExcHet: float64,
         nhomalt: int32,
         call_rate: float64,
         AC_jeju: int32,
         AN_jeju: int32,
-        AF_jeju: float64
+        AF_jeju: float64,
+        nhomalt_jeju: int32
     }
 ----------------------------------------
 Key: ['locus', 'alleles']
@@ -177,7 +179,9 @@ mt = mt.filter_rows(
 ```
 
 The `AN` condition matters: a missing or zero frequency at a poorly covered
-site is not evidence of rarity. See
+site is not evidence of rarity. With 11,000 samples `AN` is at most 22,000 on
+the autosomes, so the threshold above corresponds to a call rate of roughly
+0.68; choose your own according to how much power your analysis needs. See
 [data-dictionary.md](data-dictionary.md#core-frequency-fields).
 
 > **TODO:** record the Hail version the table was written with. Hail Table

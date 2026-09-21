@@ -66,7 +66,7 @@ The two tiers differ in how you get them, not in whether they are available:
 | | Open tier | Controlled tier |
 |---|---|---|
 | Contents | Site-level allele frequencies and supporting resources | Participant-level reads, per-sample gVCF, multi-sample VCF |
-| Licence | CC BY 4.0 | KOVA3 Data Use Agreement |
+| License | CC BY 4.0 | KOVA3 Data Use Agreement |
 | How to get it | Download or stream directly; no registration | Apply; see [docs/data-access.md](docs/data-access.md) |
 | Cost | None | None |
 | Eligibility | Anyone | Academic researchers, non-commercial research |
@@ -144,8 +144,9 @@ ht = hl.read_table("s3://kova3-open/data/release=v3.0.0/hail/kova3.sites.ht")
 ht.describe()
 ```
 
-More worked examples, including Amazon Athena queries against the Parquet
-layer, live in [`tutorials/`](tutorials/).
+Worked examples live in [`tutorials/`](tutorials/). Notebook 1 is published;
+the rest, including Amazon Athena queries against the Parquet layer, follow at
+launch.
 
 > **TODO:** publish the remaining tutorial notebooks. Each should state expected
 > output, runtime, bytes scanned, approximate user cost, and the pinned release
@@ -158,7 +159,7 @@ layer, live in [`tutorials/`](tutorials/).
 | Document | Contents |
 |---|---|
 | [Controlled-tier data access](docs/data-access.md) | Who may apply for participant-level data, and how |
-| [License and data owners](docs/data-owners.md) | Licence terms, data ownership, attribution requirements |
+| [License and data owners](docs/data-owners.md) | License terms, data ownership, attribution requirements |
 | [Cohorts and consent](docs/cohorts.md) | Contributing cohorts, sample counts, consent basis |
 | [Methods and QC](docs/methods.md) | Joint genotyping pipeline, QC, batch-effect assessment |
 | [Data dictionary](docs/data-dictionary.md) | Every published INFO field, with definition and type |
@@ -170,7 +171,7 @@ layer, live in [`tutorials/`](tutorials/).
 
 ---
 
-## Licence
+## License
 
 The open tier, this documentation, the schemas, and the tutorial notebooks are
 released under

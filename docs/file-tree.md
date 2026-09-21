@@ -138,11 +138,10 @@ chromosome.
 the longest GRCh38 contig, chr1, is 249 Mb, well inside that limit. Publishing
 `.csi` alongside would add a second index for no additional reach.
 
-**Sites-only VCF, not BCF.** BCF is smaller than bgzip-compressed VCF when
-per-sample genotype columns dominate the file. A sites-only callset has no
-genotype columns, and measured on a representative shard the BCF is about 15
-per cent larger than the VCF. Users who prefer BCF can convert locally with
-`bcftools view -Ob`.
+**Sites-only VCF, not BCF.** BCF's size and parsing advantage comes from
+per-sample genotype columns, which a sites-only callset does not have, so it
+buys little here while costing the wide tool compatibility that bgzip-compressed
+VCF has. Users who prefer BCF can convert locally with `bcftools view -Ob`.
 
 **Top-level `data/`, `metadata/`, `docs/` prefixes with a README at the root.**
 This follows the layout recommended in the AWS Open Data onboarding handbook,

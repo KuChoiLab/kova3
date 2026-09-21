@@ -29,9 +29,9 @@ internationally, for non-commercial research.
 You are eligible if all of the following hold.
 
 1. You hold a research position at a university, hospital, government research
-   institute, or non-profit research organisation.
+   institute, or non-profit research organization.
 2. Your institution will sign the Data Use Agreement through a person
-   authorised to bind it. A student or postdoctoral researcher may lead the
+   authorized to bind it. A student or postdoctoral researcher may lead the
    project, but the agreement is signed by a principal investigator and by the
    institutional signing authority.
 3. The proposed use is non-commercial research.
@@ -47,7 +47,7 @@ than an individual.
 **Commercial use is not currently supported.** The contributing cohorts'
 consent instruments and data provision agreements have not been assessed for
 commercial secondary use of participant-level data. Researchers at commercial
-organisations who wish to discuss a research collaboration may contact us, but
+organizations who wish to discuss a research collaboration may contact us, but
 should not expect access under the standard process.
 
 ---
@@ -63,7 +63,7 @@ for the whole dataset without a stated analysis will be returned.
 
 **2. Applicant and institution.** Name, position, institution, department, and
 institutional email address of the principal investigator, plus the name and
-contact details of the person authorised to sign on behalf of the institution.
+contact details of the person authorized to sign on behalf of the institution.
 Please apply from your institutional address rather than a personal one.
 
 **3. Ethics approval.** The IRB or research ethics committee approval covering
@@ -113,14 +113,14 @@ The agreement's substantive obligations are these.
   may be published freely.
 - **Destruction.** Data are destroyed at the end of the stated project period,
   and destruction is confirmed in writing.
-- **Breach reporting.** Any actual or suspected loss, unauthorised access, or
+- **Breach reporting.** Any actual or suspected loss, unauthorized access, or
   disclosure is reported within 72 hours.
 - **Term and revocation.** Approvals run for two years and may be renewed on
   request. Access may be revoked for breach, and the applicant's institution
   will be notified.
 
 The full Data Use Agreement text will be published on this page before the first
-controlled-access release. This section summarises its terms; the signed document
+controlled-access release. This section summarizes its terms; the signed document
 governs.
 
 ---
@@ -183,7 +183,7 @@ specific to your project.
 |---|---|
 | [README](../README.md) | Resource overview and open-tier quick start |
 | [Cohorts and consent](cohorts.md) | Contributing cohorts, sample counts, consent basis |
-| [Licence and data owners](data-owners.md) | Open-tier licence, data ownership, attribution |
+| [License and data owners](data-owners.md) | Open-tier license, data ownership, attribution |
 | [Methods and QC](methods.md) | Joint genotyping pipeline and quality control |
 | [File tree](file-tree.md) | Bucket layout and release manifest |
 | [Citation](../CITATION.md) | How to cite KOVA3 |

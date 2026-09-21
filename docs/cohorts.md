@@ -7,7 +7,7 @@ independently generated sources.
 
 | Cohort | Source institution | Records | Notes |
 |---|---:|---:|---|
-| National Integrated Bio-Big Data (국통바빅) | KOBIC | 4,739 | |
+| National Integrated Bio-Big Data (국가통합바이오빅데이터) | KOBIC | 4,739 | |
 | Jeju Genome | Invites Genomics | 2,987 | Geographically distinct island population; see note below |
 | Korea4K | KOGIC | 1,661 | Eligible subset of a 3,737-record cohort; see note below |
 | Korea10K | KOGIC | 1,613 | Additional production within the Korea10K project |
@@ -25,13 +25,10 @@ Korea4K as a whole is 3,737 records, and KOVA3 takes the subset that meets two
 conditions at once: the participant is a healthy control, and their consent
 covers secondary provision of the data to a third party. Records failing either
 condition are not eligible for KOVA3 regardless of data quality. **1,661**
-records meet both, and that is the contribution KOVA3 carries.
-
-Two participants who would otherwise have qualified were found during that
-screen not to have consented to broad secondary use. They are excluded from
-every tier of KOVA3: from the joint genotyping that produces the open-tier
-frequencies, and from the controlled tier. The contribution is therefore 1,661,
-not 1,663.
+records meet both, and that is the contribution KOVA3 carries. Two participants
+were excluded at the consent condition, and the exclusion applies to every tier:
+they are absent from the joint genotyping that produces the open-tier
+frequencies as well as from the controlled tier.
 
 The identifiers excluded from both cohorts are held in the project's internal
 exclusion list and are deliberately not published here: naming them would
@@ -49,16 +46,17 @@ sample. This determines what a controlled-tier applicant receives.
 
 | Cohort | Records | FASTQ | CRAM | Notes |
 |---|---:|---|---|---|
-| National Integrated Bio-Big Data (KOBIC) | 4,739 | | Yes | Format holdings not yet verified against the delivered inventory |
-| Jeju Genome | 2,987 | | Yes | Aligned CRAM with CRAI for every sample |
+| National Integrated Bio-Big Data (KOBIC) | 4,739 | No | *Reported* | Reported as CRAM; holdings not yet reconciled against the delivered inventory |
+| Jeju Genome | 2,987 | No | Yes | Aligned CRAM with CRAI for every sample |
 | Korea4K | 1,661 | Yes | Yes | FASTQ and aligned CRAM both held; see below |
-| Korea10K | 1,613 | Yes | | No CRAM exists for this cohort |
+| Korea10K | 1,613 | Yes | No | No CRAM exists for this cohort |
 
-**All CRAM published in the controlled tier is aligned.** It is coordinate-sorted
-against GRCh38 and carries a CRAI index, so a single locus can be streamed
-without downloading the file. Korea4K CRAM is DRAGEN 4.2.4 output against an
-alt-masked GRCh38; Jeju CRAM arrives aligned and indexed from the sequencing
-provider.
+**All CRAM KOVA3 publishes is aligned.** It is coordinate-sorted against
+GRCh38 and carries a CRAI index, so a single locus can be streamed without
+downloading the file. Korea4K CRAM is DRAGEN output against an alt-masked
+GRCh38; Jeju CRAM arrives aligned and indexed from the sequencing provider. The
+KOBIC holdings are reported as CRAM but have not yet been reconciled against
+the delivered inventory, and that row is confirmed before release.
 
 Korea4K also exists as unaligned CRAM, the original EGA deposit, and that is
 **not** what KOVA3 publishes. The distinction is not visible in the filename:
@@ -132,7 +130,7 @@ University. The **licensing authority** consequences of these confirmations are
 tracked in [data-owners.md](data-owners.md#redistribution-authority); this
 table is the governance evidence behind that determination.
 
-| Cohort | Consent instrument | Consent permits public aggregate release, no access controls | IRB / ethics approval (with number) | Data provision agreement with Korea University | Cohort-specific publication restriction |
+| Cohort | Consent instrument | Consent permits public aggregate release, no access controls | IRB / ethics approval (with number) | Data provision agreement with the Choi Lab | Cohort-specific publication restriction |
 |---|---|---|---|---|---|
 | National Integrated Bio-Big Data (KOBIC) | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
 | Jeju Genome | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
@@ -141,12 +139,12 @@ table is the governance evidence behind that determination.
 
 > **Status: outstanding, and blocking the first data release.** Every row is
 > `Pending`. The analysis that produces KOVA3 is carried out under institutional
-> ethics approval held by the Choi Laboratory and by the providing institutions,
+> ethics approval held by the Choi Lab and by the providing institutions,
 > and each contributing cohort was collected under its own approved protocol.
-> Approval to analyse is not the same as written confirmation that a cohort's
+> Approval to analyze is not the same as written confirmation that a cohort's
 > consent permits unrestricted public aggregate release, which is what this
 > table records. Until a cohort's row is fully confirmed in writing (evidence
-> held on file by the Choi Laboratory and the institutional legal/IRB office),
+> held on file by the Choi Lab and the institutional legal/IRB office),
 > that cohort **cannot** be included in the release or in the allele-number
 > denominators. Record each approval reference directly in the table when
 > obtained. Registering the resource and publishing this documentation do not
@@ -156,7 +154,7 @@ table is the governance evidence behind that determination.
 
 KOVA3 publishes **aggregate site-level statistics only**. No participant-level
 sequence, genotype, or identifying metadata is released. This scope was chosen
-so that the resource can be shared under an open licence consistent with the
+so that the resource can be shared under an open license consistent with the
 consent obtained across the contributing cohorts.
 
 Where a contributing cohort's consent or data provision agreement does not

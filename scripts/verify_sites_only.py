@@ -31,10 +31,10 @@ Usage
 The published open-tier INFO allow-list (see docs/data-dictionary.md) is:
 
   KOVA3_OPEN_INFO=AC,AN,AF,nhomalt,call_rate,NS,NS_GT,NS_NOGT,NS_NODATA,\
-AC_jeju,AN_jeju,AF_jeju,nhomalt_jeju,GIC,GHWE,GHWEc2,GExcHet,GABHom,GABHet,GABHetP
+AC_jeju,AN_jeju,AF_jeju,nhomalt_jeju,IC,HWE,HWEc2,ExcHet
 
-Passing it is what catches a failed rename or a batch-level field that survived
-export, because anything outside the list fails the run.
+Passing it is what catches a batch-level field or any other unexpected INFO key
+that survived export, because anything outside the list fails the run.
 
 --max-records N limits body scanning to the first N records (0 = all; default all).
 Only the standard library is used; gzip/bgzip input is handled transparently.

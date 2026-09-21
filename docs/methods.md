@@ -37,34 +37,68 @@ that conversion is what makes the open tier publishable without restriction. See
 
 ## Reference genome
 
-All coordinates are on **GRCh38**.
+All coordinates are on **GRCh38**, with `chr`-prefixed contig names.
 
-> **TODO:** state the exact reference used: FASTA filename, accession
-> (for example `GCA_000001405.15_GRCh38_no_alt_analysis_set`), whether ALT
-> contigs and decoys were included, and the contig naming convention
-> (`chr1` vs `1`). Users cannot correctly lift or intersect KOVA3 against
-> other resources without this.
+The reference is the ALT-aware GRCh38 analysis set used by DRAGEN on Illumina
+Connected Analytics, with decoy and HLA sequences included. It carries **3,366
+contigs**:
+
+| Class | Count |
+|---|---:|
+| Primary assembly (`chr1`-`chr22`, `chrX`, `chrY`, `chrM`) | 25 |
+| Unlocalized (`*_random`) | 42 |
+| Unplaced (`chrUn_*`) | 127 |
+| `chrEBV` | 1 |
+| ALT contigs (`*_alt`) | 261 |
+| Decoy (`*_decoy`) | 2,385 |
+| HLA | 525 |
+| **Total** | **3,366** |
+
+`chr1` is 248,956,422 bp and `chrM` is 16,569 bp (rCRS), as expected for
+GRCh38. ALT contigs are present in the reference but ALT-masked in the DRAGEN
+graph build, so reads are placed on the primary assembly.
+
+Sites on non-primary contigs are not published: the open tier covers
+`chr1`-`chr22`, `chrX`, `chrY` and `chrM` only.
+
+> **TODO:** record the ICA reference bundle name and the underlying FASTA
+> filename. The produced VCF header carries no `##reference=` line, so the
+> contig set above is currently the only machine-checkable description.
 
 ## Joint genotyping
 
 Per-sample gVCFs from all contributing cohorts are combined through a single
-**DRAGEN Iterative gVCF Genotyper (IGG)** run on the Illumina Connected
+**DRAGEN iterative gVCF Genotyper (iGG)** run on the Illumina Connected
 Analytics platform.
 
-> **TODO:** record the exact DRAGEN IGG version (for example `v4.4.7`), the
-> ICA pipeline identifier, and any non-default parameters. Version pinning is
-> required for reproducibility and is referenced in the application.
->
-> Two parameters need explicit attention:
->
-> - **`--gg-msvcf-info-fields`.** `AF` is not in the iGG default INFO set, so a
->   run left at the default produces no allele frequency field. Set this
->   explicitly, and record the value used.
-> - **`--gg-drop-genotypes`.** iGG can emit a sites-only callset natively, but
->   the KOVA3-derived fields (homozygote counts, call rate, Jeju stratum) must
->   be computed while genotypes are still present. See
->   [data-dictionary.md](data-dictionary.md#deriving-the-kova3-fields) for the
->   required ordering.
+| Step | Software |
+|---|---|
+| Per-sample alignment and gVCF generation | DRAGEN v4.2, `--enable-map-align true`, `--enable-duplicate-marking true`, `--vc-emit-ref-confidence GVCF`, `--vc-ml-enable-recalibration true`, CRAM output |
+| Joint genotyping | DRAGEN iterative gVCF Genotyper **v1.2.3**, `--enable-gvcf-genotyper-iterative true`, `--merge-batches true`, `--gg-enable-indexing true` |
+| Platform | Illumina Connected Analytics, Korea region |
+| Sharding | 102 shards over the 3,366-contig reference |
+
+**Why iGG v1.2.3 and not a later release.** v1.2.6 was current when the run was
+configured, but it fails to recognize the `HLA-DRB1*07` allele. The algorithm is
+otherwise unchanged between the two, so v1.2.3 was pinned for the whole cohort
+rather than mixing versions across batches.
+
+`--merge-batches true` matters for how the output reads: it merges the
+processing batches before the cohort statistics are written, so the callset
+carries one set of cohort-wide `AC`, `AN` and `NS*` values under plain,
+unprefixed names, with no batch-level duplicates. See
+[data-dictionary.md](data-dictionary.md#field-naming-convention).
+
+`AF` is not in the iGG default INFO set and is not requested, so the joint
+genotyping output has no allele frequency field. KOVA3 derives `AF` together
+with `nhomalt`, `call_rate` and the Jeju stratum fields, which must happen
+while genotypes are still present; see
+[data-dictionary.md](data-dictionary.md#deriving-the-kova3-fields) for the
+required ordering.
+
+> **TODO:** record the exact ICA pipeline identifier and Docker image tag for
+> the production run, and the per-sample DRAGEN patch version, once the final
+> callset is produced. The image tag has the form `v<igg>-d<dragen>-<build>`.
 
 ### Why joint genotyping rather than meta-analysis
 
@@ -170,7 +204,7 @@ contributing cohorts.
 >   differ
 > - cross-cohort allele frequency concordance at common variants, with a
 >   correlation statistic and a plot
-> - principal components computed within the cohort, coloured by contributing
+> - principal components computed within the cohort, colored by contributing
 >   cohort, to show whether cohort separates from population structure
 > - identification of any genomic regions where cohort effects are strong
 >   enough that frequencies should be treated with caution

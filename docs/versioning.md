@@ -93,7 +93,7 @@ Each release and each erratum is announced through:
 
 - GitHub releases and the issue tracker on this repository. Watch the
   repository with the Releases filter to be notified of each release.
-- The Choi Laboratory website at <https://choi.korea.ac.kr/>
+- The Choi Lab website at <https://choi.korea.ac.kr/>
 - The laboratory X account [@jungminchoilab](https://x.com/jungminchoilab)
 - The Registry of Open Data on AWS entry
 

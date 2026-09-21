@@ -8,7 +8,7 @@ without the version.
 
 ```
 Korean Variant Archive 3 (KOVA3), release vX.Y.Z.
-Choi Laboratory, Korea University College of Medicine.
+Choi Lab, Korea University College of Medicine.
 Registry of Open Data on AWS: https://registry.opendata.aws/kova3/ (live at launch)
 ```
 
@@ -28,17 +28,18 @@ KOVA3 builds on two earlier Korean variant frequency resources. If your work
 draws on the KOVA lineage rather than only the current release, cite these as
 well.
 
-- **KOVA**: *The Korean Variant Archive (KOVA): a reference database of genetic
-  variations in the Korean population.* Scientific Reports, 2017.
+- **KOVA**: Lee S, Seo J, Park J, Nam J-Y, Choi A, Ignatius JS, Bjornson RD,
+  Chae J-H, Jang I-J, Lee S, Park W-Y, Baek D, Choi M. *Korean Variant Archive
+  (KOVA): a reference database of genetic variations in the Korean population.*
+  Scientific Reports 2017;7(1):4287.
   doi:[10.1038/s41598-017-04642-4](https://doi.org/10.1038/s41598-017-04642-4)
-- **KOVA2**: *A database of 5305 healthy Korean individuals reveals genetic and
-  clinical implications for an East Asian population.* Experimental & Molecular
-  Medicine, 2022; 5,305 individuals.
+- **KOVA2**: Lee J, Lee J, Jeon S, Lee J, Jang I, Yang JO, Park S, Lee B,
+  Choi J, Choi B-O, Gee HY, Oh J, Jang I-J, Lee S, Baek D, Koh Y, Yoon S-S,
+  Kim Y-J, Chae J-H, Park W-Y, Bhak JH, Choi M. *A database of 5305 healthy
+  Korean individuals reveals genetic and clinical implications for an East Asian
+  population.* Experimental & Molecular Medicine 2022;54(11):1862-1871; 1,896
+  whole genomes and 3,409 whole exomes.
   doi:[10.1038/s12276-022-00871-4](https://doi.org/10.1038/s12276-022-00871-4)
-
-> **TODO:** add the full author lists, volume, and article/page numbers from each
-> publisher record (see the DOIs above). The DOIs and journals are verified; the
-> author lists are left to be transcribed from the publisher pages.
 
 ## Acknowledging the contributing cohorts
 
@@ -51,8 +52,8 @@ citing KOVA3.
 > [docs/data-owners.md](docs/data-owners.md#redistribution-authority), and
 > publish the required wording here.
 
-## Licence attribution
+## License attribution
 
 KOVA3 is released under CC BY 4.0. Attribution requires crediting the source,
-linking to the licence, and indicating whether changes were made. See
+linking to the license, and indicating whether changes were made. See
 [LICENSE](LICENSE).
