@@ -293,14 +293,16 @@ separately. Per-sample coverage comes from the DRAGEN
 > - which DRAGEN `FILTER` values are retained versus removed
 > - any additional site-level thresholds (call rate floor, Hardy–Weinberg or
 >   excess-heterozygosity cutoffs, minimum allele number)
-> - whether multi-allelic sites are split and left-aligned, and with what tool
->   and parameters
 > - the variant classes included (SNVs and short indels) and any size limit on
 >   indels
 >
 > Every filter that changes what a user sees must be documented here, because
 > a variant absent from KOVA3 is otherwise indistinguishable from a variant
 > that was filtered out.
+
+**Multi-allelic sites are split and indels left-aligned** before publication;
+the tool and parameters are given in
+[data-dictionary.md](data-dictionary.md#variant-representation-conventions).
 
 **No small-cell suppression is applied.** Singleton and very rare variants are
 published with their counts; see
@@ -323,11 +325,16 @@ gap, published under `callability/` in each release.
 | Resource | Format | Resolution | Use it for |
 |---|---|---|---|
 | Allele-number track | BED, bgzip-compressed with a tabix index | Exact. Run-length encoded, so each interval is a maximal run of constant `AN` | Streaming one region and asking "was this locus callable at all". Same access pattern as the sites-only VCF, and readable by `bedtools`, `pybedtools` and IGV |
-| Callability summary | Apache Parquet, partitioned like the frequency layer | 1 kb bins: `chromosome`, `position_bin`, `start`, `end`, `mean_an`, `median_an`, `call_rate` | Genome-wide and panel-wide work. Joins directly against the frequency tables in Athena, Spark or polars |
+| Callability summary | Apache Parquet, partitioned by `chromosome` | 1 kb bins: `chromosome`, `position_bin`, `start`, `end`, `mean_an`, `median_an`, `call_rate` | Genome-wide and panel-wide work. Joins directly against the frequency tables in Athena, Spark or polars |
 
 The BED track is the authoritative one: it is exact, with no binning. The
 Parquet summary is a convenience for aggregate queries, where 3.1 million 1 kb
 rows are far easier to work with than the full run-length encoding.
+
+The summary is partitioned by `chromosome` only. At 3.1 million rows it does
+not need the second partition level the frequency layer uses, but it carries
+`position_bin` as an ordinary column so that it joins to the frequency tables
+without a computed key.
 
 A per-base BigWig is deliberately **not** published. It needs a special writer,
 is awkward to join against tabular data, and adds nothing the two resources

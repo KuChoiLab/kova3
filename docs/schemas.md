@@ -71,7 +71,7 @@ aligned with the sites-only VCF. See
 | `ref` | STRING | no | Reference allele |
 | `alt` | STRING | no | Alternate allele, one per row |
 | `variant_id` | STRING | no | `chrom-pos-ref-alt`, stable across releases |
-| `rsid` | STRING | yes | dbSNP identifier where assigned |
+| `rsid` | STRING | yes | **Reserved, always null in this release.** dbSNP rsIDs are not assigned; see [data-dictionary.md](data-dictionary.md#fixed-columns) |
 | `qual` | FLOAT | yes | Site quality |
 | `filter` | LIST\<STRING\> | no | Filter values; `["PASS"]` when passing |
 | `ac` | INT32 | no | Cohort alternate allele count |
@@ -184,6 +184,10 @@ two releases can be registered side by side as separate tables.
 
 Keyed by locus and alleles, matching Hail's standard variant key so the table
 joins directly against a user's own `MatrixTable` or `Table`.
+
+The `rsid` field is present for schema stability but is null throughout this
+release: KOVA3 does not assign dbSNP identifiers. The same holds for the
+`rsid` column in the Parquet layer and in the Athena table definition.
 
 ```
 ----------------------------------------

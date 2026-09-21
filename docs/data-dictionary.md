@@ -100,7 +100,7 @@ Source: [DRAGEN documentation, population genotyping](https://help.dragen.illumi
 |---|---|
 | `CHROM` | Chromosome, GRCh38, `chr`-prefixed contig naming |
 | `POS` | 1-based position of the first reference base |
-| `ID` | Variant identifier. `.` unless a dbSNP rsID is assigned; see note below |
+| `ID` | Always `.`. dbSNP rsIDs are not assigned; see note below |
 | `REF` | Reference allele |
 | `ALT` | Alternate allele |
 | `QUAL` | Site quality. iGG reports the maximum input QUAL across the cohort at this site |

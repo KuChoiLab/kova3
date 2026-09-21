@@ -18,7 +18,8 @@ Outstanding before launch:
 - Joint genotyping run and export of the open tier
 - Exact unique and unrelated sample counts after deduplication and QC
 - Cohort-by-cohort consent and redistribution determination, for both tiers
-- Finalized subpopulation definitions
+- Sample QC exclusion thresholds, and the rule that assigns a projected
+  sample to an ancestry cluster
 - Reconciliation of the data dictionary against the produced VCF header
 - Per-sample manifest of read-level formats held for the controlled tier
 - Tutorial notebooks
