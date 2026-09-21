@@ -37,6 +37,13 @@ You are eligible if all of the following hold.
 3. The proposed use is non-commercial research.
 4. Your institution can meet the security conditions in the Data Use Agreement.
 
+The agreement is signed on the KOVA3 side by the principal investigator
+directly, not through a technology-transfer office, so there is no
+institutional review queue on our end. On the applicant's side an
+institutional signature is required, because the obligations in the agreement
+(security, named users, destruction) bind the receiving institution rather
+than an individual.
+
 **Commercial use is not currently supported.** The contributing cohorts'
 consent instruments and data provision agreements have not been assessed for
 commercial secondary use of participant-level data. Researchers at commercial
@@ -76,7 +83,13 @@ not acceptable.
 ## Data Use Agreement
 
 Access is granted under a Data Use Agreement between the applicant's
-institution and Korea University. There is **no fee** for access, at any stage.
+institution and Prof. Jungmin Choi, the KOVA3 principal investigator, at
+Korea University College of Medicine. There is **no fee** for access, at
+any stage.
+
+If responsibility for KOVA3 passes to another principal investigator, the
+agreement and the obligations under it carry over, and approved applicants
+are notified.
 
 The agreement's substantive obligations are these.
 
@@ -125,12 +138,12 @@ Please use the subject line `KOVA3 controlled-tier access request`.
 
 | Step | Timing |
 |---|---|
-| Acknowledgement of receipt | 5 working days |
+| Acknowledgement of receipt | 10 working days |
 | Completeness check, and a request for anything missing | 2 weeks |
 | Review decision | 8 weeks from a complete application |
 | Credentials issued after the Data Use Agreement is countersigned | 2 weeks from decision |
 
-Applications are reviewed by the principal investigator on behalf of the KOVA3 data access team, against the criteria on this page. If an application
+Applications are reviewed by the KOVA3 principal investigator against the criteria on this page. If an application
 is declined you will be told the reason, and you may revise and reapply.
 
 ---
