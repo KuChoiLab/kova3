@@ -59,10 +59,10 @@ s3://kova3-open/
             └── kova3.call_rate.chr1.<ext>
 ```
 
-> **TODO:** settle the callability file format and extension
-> see [methods.md](methods.md#callability). Confirm whether chrM is included;
-> if mitochondrial variants are not called, remove that line rather than shipping
-> an empty file.
+> **TODO:** settle the callability file format and extension;
+> see [methods.md](methods.md#callability). chrM is within the run's contig
+> list (see [methods.md](methods.md#reference-genome)), but confirm the shard
+> is non-empty before publishing it rather than shipping an empty file.
 
 ---
 

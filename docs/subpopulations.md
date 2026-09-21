@@ -67,7 +67,7 @@ treated as an ancestry label.
 ## Minimum stratum size
 
 > **TODO:** set and document whether stratified fields are suppressed at very
-> rare variants. The Jeju stratum is roughly 2,987 records against a whole
+> rare variants. The Jeju stratum is 2,987 records against a whole
 > cohort of 11,000, so stratified estimates are noisier than whole-cohort ones
 > at low frequencies, and per-stratum counts at singleton variants are the
 > smallest cells the release will publish. State the threshold applied, if any,

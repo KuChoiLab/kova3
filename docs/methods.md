@@ -58,8 +58,11 @@ contigs**:
 GRCh38. ALT contigs are present in the reference but ALT-masked in the DRAGEN
 graph build, so reads are placed on the primary assembly.
 
-Sites on non-primary contigs are not published: the open tier covers
-`chr1`-`chr22`, `chrX`, `chrY` and `chrM` only.
+Sites on non-primary contigs are not published. The joint genotyping run is
+configured over a 25-contig list (`chr1`-`chr22`, `chrX`, `chrY`, `chrM`), so
+the mitochondrial genome is in scope, but no chrM output has been inspected
+yet; the shard is confirmed non-empty before it is published. See
+[file-tree.md](file-tree.md).
 
 > **TODO:** record the ICA reference bundle name and the underlying FASTA
 > filename. The produced VCF header carries no `##reference=` line, so the
