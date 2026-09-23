@@ -191,7 +191,7 @@ application is never held up by a single mailbox.
 | | Address |
 |---|---|
 | Principal investigator, and the decision on your application | **Jungmin Choi**, <jungminchoi@korea.ac.kr> |
-| KOVA3 data access team, for receipt and correspondence | <ku.choi.lab@gmail.com> |
+| KOVA3 data access team, for receipt and correspondence | <ku_choi_lab@korea.ac.kr> |
 
 Department of Biomedical Sciences, Korea University College of Medicine.
 
@@ -236,7 +236,7 @@ a single locus can be streamed without downloading the file.
 
 If you are unsure whether your analysis needs the controlled tier, or whether
 you are eligible, ask before preparing a full application. Open an issue in
-this repository for general questions, or write to <ku.choi.lab@gmail.com> for
+this repository for general questions, or write to <ku_choi_lab@korea.ac.kr> for
 questions specific to your project.
 
 ---
