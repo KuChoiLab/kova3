@@ -8,7 +8,7 @@ abstract: >-
   callability) derived from a uniformly joint-genotyped whole-genome callset.
 type: dataset
 license: CC-BY-4.0
-url: "https://github.com/KuChoiLab/kova3"
+url: "https://github.com/ku-choi-lab/kova3"
 # Uncomment once the Registry of Open Data entry is merged and live. Until then
 # the URL returns 404 and would render as a dead link on the citation card.
 # repository: "https://registry.opendata.aws/kova3/"
