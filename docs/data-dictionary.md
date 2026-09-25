@@ -79,8 +79,9 @@ The same applies to any other frequency resource you annotate alongside KOVA3:
 give each one a prefix, or the last one written wins.
 
 > **TODO, before launch.** The field list below is taken from the header of a
-> KOVA3 iGG callset produced on 2025-05-21 with iGG v1.2.3. Reconfirm it against
-> the header of the final production callset, since the emitted set depends on
+> KOVA3 iGG callset produced on 2025-05-21 with iGG v1.2.3. The production
+> release is generated with iGG v2.2.4; reconfirm the list against the header of
+> that callset, since the emitted set depends on
 > the iGG version and on the `--gg-msvcf-info-fields` value used:
 >
 > ```bash
@@ -253,7 +254,9 @@ The required order is:
 
 ## FILTER values
 
-The values below are taken from the header of the KOVA3 iGG callset. iGG applies
+The values below are taken from the header of the iGG v1.2.3 KOVA3 callset and
+are reconfirmed against the v2.2.4 production callset, whose machine-learning
+filtering step can add FILTER values not listed here. iGG applies
 hard filters to cohort-wide metrics; filtering is per-site, so SNVs and indels
 cannot be filtered separately as they can in the variant caller.
 

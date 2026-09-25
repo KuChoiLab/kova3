@@ -52,8 +52,8 @@ alongside KOVA3. Two of the contributing cohorts have one.
   GigaScience 2024;13.
   doi:[10.1093/gigascience/giae014](https://doi.org/10.1093/gigascience/giae014)
 - **Korea10K**: An K, Jeon S, Kwon Y, et al. *10,239 whole genomes with
-  multiomic and clinical health information as the Korean population multiomic
-  reference dataset.* bioRxiv 2025.
+  multiomic and clinical health information as the Korean Multiomics
+  Reference dataset.* bioRxiv 2025.
   doi:[10.1101/2025.11.17.688763](https://doi.org/10.1101/2025.11.17.688763)
   (preprint, not peer reviewed; replace with the journal version once published)
 

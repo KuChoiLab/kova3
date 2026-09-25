@@ -77,17 +77,23 @@ Analytics platform.
 | Step | Software |
 |---|---|
 | Per-sample alignment and gVCF generation | DRAGEN v4.2, `--enable-map-align true`, `--enable-duplicate-marking true`, `--vc-emit-ref-confidence GVCF`, `--vc-ml-enable-recalibration true`, CRAM output |
-| Joint genotyping | DRAGEN iterative gVCF Genotyper **v1.2.3**, `--enable-gvcf-genotyper-iterative true`, `--merge-batches true`, `--gg-enable-indexing true` |
+| Joint genotyping | DRAGEN iterative gVCF Genotyper, PopGen CLI **v2.2.4** (Illumina IGG v2 workflow: per-batch aggregation, per-version census aggregation, msVCF generation with machine-learning site filtering, concatenation) |
 | Platform | Illumina Connected Analytics, Korea region |
 | Sharding | 102 shards over the 3,366-contig reference |
 
-**Why iGG v1.2.3 and not a later release.** v1.2.6 was current when the run was
-configured, but it fails to recognize the `HLA-DRB1*07` allele. The algorithm is
-otherwise unchanged between the two, so v1.2.3 was pinned for the whole cohort
-rather than mixing versions across batches.
+**Input gVCF version.** The per-sample gVCFs were produced with DRAGEN 4.2.4,
+read from the `##DRAGENCommandLine=<ID=dragen,...>` header line. This is
+confirmed for the KOBIC, Korea10K and Jeju Genome cohorts and is checked for
+Korea4K before its batches are run, so the joint genotyping uses a single gVCF
+version across all batches.
 
-`--merge-batches true` matters for how the output reads: it merges the
-processing batches before the cohort statistics are written, so the callset
+An earlier KOVA3 callset was produced on 2025-05-21 with iGG v1.2.3. The
+production release is regenerated with iGG v2.2.4; statements below that
+describe v1.2.3 output are reconfirmed against the v2.2.4 callset before
+launch.
+
+Batch merging matters for how the output reads: the processing batches are
+merged before the cohort statistics are written, so the callset
 carries one set of cohort-wide `AC`, `AN` and `NS*` values under plain,
 unprefixed names, with no batch-level duplicates. See
 [data-dictionary.md](data-dictionary.md#field-naming-convention).
