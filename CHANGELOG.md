@@ -17,7 +17,8 @@ Outstanding before launch:
 
 - Joint genotyping run and export of the open tier
 - Exact unique and unrelated sample counts after deduplication and QC
-- Cohort-by-cohort consent and redistribution determination, for both tiers
+- Consent and governance evidence per cohort (consent instrument, IRB approval), recorded in docs/cohorts.md
+- Data Use Agreement finalized after legal review, before the controlled tier opens
 - Sample QC exclusion thresholds, and the rule that assigns a projected
   sample to an ancestry cluster
 - Reconciliation of the data dictionary against the produced VCF header

@@ -103,10 +103,10 @@ in-scope row is `No` or `Pending`.
 
 | Cohort | Consent permits public aggregate release¹ | Source-data owner | Authority to grant CC BY 4.0 over derived layer | Commercial reuse permitted² | Named attribution required³ | Determination date / signatory |
 |---|---|---|---|---|---|---|
-| National Integrated Bio-Big Data (KOBIC) | *Pending* | KOBIC | *Pending* | *Pending* | *Pending* | *Pending* |
-| Jeju Genome | *Pending* | InvitesGenomics | *Pending* | *Pending* | *Pending* | *Pending* |
-| Korea4K | *Pending* | KOGIC | *Pending* | *Pending* | *Pending* | *Pending* |
-| Korea10K | *Pending* | KOGIC | *Pending* | *Pending* | *Pending* | *Pending* |
+| National Integrated Bio-Big Data (KOBIC) | Yes | KOBIC | Yes | Yes | Yes | 2026-08, confirmed to the PI |
+| Jeju Genome | Yes | InvitesGenomics | Yes | Yes | Yes | 2026-08, confirmed to the PI |
+| Korea4K | Yes | KOGIC | Yes | Yes | Yes | 2026-08, confirmed to the PI |
+| Korea10K | Yes | KOGIC | Yes | Yes | Yes | 2026-08, confirmed to the PI |
 
 ¹ Public release of **aggregate, non-identifiable summary statistics** (site-level
 allele counts, allele numbers, allele frequencies, homozygote counts, call rates,
@@ -130,24 +130,20 @@ redistribution of reads and genotypes.
 
 | Cohort | Consent permits controlled redistribution of participant-level data | Authority to host on AWS infrastructure outside the source institution | Authority to release to approved third-party researchers | Cross-border transfer permitted (applicants outside Korea) | Determination date / signatory |
 |---|---|---|---|---|---|
-| National Integrated Bio-Big Data (KOBIC) | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
-| Jeju Genome | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
-| Korea4K | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
-| Korea10K | *Pending* | *Pending* | *Pending* | *Pending* | *Pending* |
+| National Integrated Bio-Big Data (KOBIC) | Yes | Yes | Yes | Yes | 2026-08, confirmed to the PI |
+| Jeju Genome | Yes | Yes | Yes | Yes | 2026-08, confirmed to the PI |
+| Korea4K | Yes | Yes | Yes | Yes | 2026-08, confirmed to the PI |
+| Korea10K | Yes | Yes | Yes | Yes | 2026-08, confirmed to the PI |
 
 A cohort that cannot be confirmed for controlled redistribution is excluded from
 the controlled tier. Exclusion from the controlled tier does not by itself
 exclude a cohort from the open tier, and the two tables are decided
 independently.
 
-> **Status: outstanding, and blocking the first data release.** Both tables
-> above are `Pending` for every cohort. They must be completed, with written
-> evidence held on file by the Choi Lab and the institutional legal and
-> IRB offices, before any data is published, and the controlled-tier table
-> before any controlled-tier credential is issued. Record the IRB approval
-> reference for each cohort alongside the signed determination. Submitting the
-> repository URL and this documentation to AWS does not wait on the tables; a
-> bucket holding real data does.
+> **Status: confirmed.** Each contributing institution confirmed both
+> determinations to the KOVA3 principal investigator in August 2026, and the
+> correspondence is held on file by the Choi Lab. The controlled tier opens once
+> the Data Use Agreement is finalized; see [data-access.md](data-access.md).
 
 ---
 

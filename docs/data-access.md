@@ -1,12 +1,12 @@
 # Controlled-tier data access
 
-> **Status: the controlled tier is not yet open.** Applications open once each
-> contributing institution has confirmed, in writing, that participant-level
-> data from its cohort may be redistributed under this process, including to
-> applicants outside Korea. Those determinations are recorded in
-> [data-owners.md](data-owners.md) and are currently pending for every cohort.
-> This page describes the process that will apply when the tier opens. Please do
-> not send an application before then; enquiries are welcome at any time.
+> **Status: the controlled tier is not yet open.** Each contributing institution
+> has confirmed that participant-level data from its cohort may be redistributed
+> under this process, including to applicants outside Korea; see
+> [data-owners.md](data-owners.md). Applications open once the Data Use
+> Agreement below is finalized after legal review. This page describes the
+> process that will apply when the tier opens. Please do not send an application
+> before then; enquiries are welcome at any time.
 
 KOVA3 is released in two tiers.
 
