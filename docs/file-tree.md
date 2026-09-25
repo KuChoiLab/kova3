@@ -166,7 +166,7 @@ object with its size and checksum.
   "release": "v3.0.0",
   "released": "TODO-YYYY-MM-DD",
   "reference_genome": "GRCh38",
-  "n_records_contributed": 11000,
+  "n_records_contributed": 10988,
   "n_unrelated": null,
   "pipeline": {
     "joint_genotyper": "DRAGEN IGG TODO-version",

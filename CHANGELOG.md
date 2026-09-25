@@ -9,7 +9,7 @@ one.
 
 ## [Unreleased]
 
-Preparing the initial KOVA3 release (`v3.0.0`) from 11,000 Korean whole-genome
+Preparing the initial KOVA3 release (`v3.0.0`) from 10,988 Korean whole-genome
 cohort records, in two tiers: an open allele-frequency layer and a
 controlled-access layer holding the participant-level sequencing data.
 

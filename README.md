@@ -17,7 +17,7 @@ layer holding the participant-level sequencing data.
 ### What KOVA3 is
 
 KOVA3 is a Korean genome resource derived from whole-genome sequencing of
-11,000 cohort records. Its **open tier** is an openly licensed, population-level
+10,988 cohort records. Its **open tier** is an openly licensed, population-level
 allele-frequency callset: for each variant site it reports how often the
 alternate allele is observed in this Korean cohort, together with the
 information needed to interpret that number responsibly. Its **controlled

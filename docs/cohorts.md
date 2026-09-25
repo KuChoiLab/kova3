@@ -2,7 +2,7 @@
 
 ## Cohort composition
 
-KOVA3 integrates **11,000 Korean whole-genome cohort records** from four
+KOVA3 integrates **10,988 Korean whole-genome cohort records** from four
 independently generated sources.
 
 | Cohort | Source institution | Records | Notes |
@@ -10,11 +10,11 @@ independently generated sources.
 | National Integrated Bio-Big Data (국가통합바이오빅데이터) | KOBIC | 4,739 | |
 | Jeju Genome | InvitesGenomics | 2,987 | Geographically distinct island population; see note below |
 | Korea4K | KOGIC | 1,661 | Eligible subset of a 3,737-record cohort; see note below |
-| Korea10K | KOGIC | 1,613 | Additional production within the Korea10K project |
-| **Total** | | **11,000** | Before cross-cohort deduplication |
+| Korea10K | KOGIC | 1,601 | Additional production within the Korea10K project; see note below |
+| **Total** | | **10,988** | Before cross-cohort deduplication |
 
-Two cohorts contribute fewer records than their first-quoted size, for
-different reasons, and both exclusions are final.
+Three cohorts contribute fewer records than their first-quoted size, for
+different reasons, and all three exclusions are final.
 
 The Jeju Genome cohort was assembled as 2,993 records. **Six** were found to
 disagree with their accompanying metadata and were excluded before transfer, so
@@ -30,7 +30,13 @@ were excluded at the consent condition, and the exclusion applies to every tier:
 they are absent from the joint genotyping that produces the open-tier
 frequencies as well as from the controlled tier.
 
-The identifiers excluded from both cohorts are held in the project's internal
+Korea10K was first quoted as 1,613 records. **Twelve** are excluded. Eleven
+were identified as duplicates in a review with the transferring institution
+(KOBIC). One further record shares part of its sequencing files with another
+record, so its data cannot be attributed to a single individual. 1,601 are
+carried. Like the exclusions above, they are absent from every tier.
+
+The identifiers excluded from these cohorts are held in the project's internal
 exclusion list and are deliberately not published here: naming them would
 disclose a participant-level consent or quality status about people who are not
 otherwise identifiable in this resource. The list is passed to the release gate
@@ -39,8 +45,8 @@ otherwise identifiable in this resource. The list is passed to the release gate
 anywhere in a published file, so an excluded record cannot reach either tier
 unnoticed.
 
-Published material that quotes 2,993, 1,663, or a total of 11,008 or 11,002
-predates these exclusions.
+Published material that quotes 2,993, 1,663, 1,613, or a total of 11,008,
+11,002 or 11,000 predates these exclusions.
 
 ### Read-level data held per cohort
 
@@ -52,7 +58,7 @@ sample. This determines what a controlled-tier applicant receives.
 | National Integrated Bio-Big Data (KOBIC) | 4,739 | No | *Reported* | Reported as CRAM; holdings not yet reconciled against the delivered inventory |
 | Jeju Genome | 2,987 | No | Yes | Aligned CRAM with CRAI for every sample |
 | Korea4K | 1,661 | Yes | Yes | FASTQ and aligned CRAM both held; see below |
-| Korea10K | 1,613 | Yes | No | No CRAM exists for this cohort |
+| Korea10K | 1,601 | Yes | No | No CRAM exists for this cohort |
 
 **All CRAM KOVA3 publishes is aligned.** It is coordinate-sorted against
 GRCh38 and carries a CRAI index, so a single locus can be streamed without
@@ -71,7 +77,7 @@ objects are renamed to `<SAMPLE>.cram` at upload, and the per-sample manifest
 records the source path.
 
 Per-sample gVCF exists for every cohort. The genotyped multi-sample VCF covers
-all 11,000 records. A per-sample manifest published with the controlled tier
+all 10,988 records. A per-sample manifest published with the controlled tier
 states exactly which formats exist for each sample; see
 [file-tree.md](file-tree.md).
 

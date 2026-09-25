@@ -111,7 +111,7 @@ WHERE chromosome = 'chr17'
   AND pos BETWEEN 43044295 AND 43125364
   AND af < 0.01
   AND an > 15000          -- require adequate power before trusting a low frequency
-                          -- 11,000 samples means an <= 22000 on the autosomes,
+                          -- 10,988 samples means an <= 21976 on the autosomes,
                           -- so 15000 is a call rate of about 0.68
 ORDER BY pos;
 ```
@@ -251,7 +251,7 @@ mt = mt.filter_rows(
 ```
 
 The `AN` condition matters: a missing or zero frequency at a poorly covered
-site is not evidence of rarity. With 11,000 samples `AN` is at most 22,000 on
+site is not evidence of rarity. With 10,988 samples `AN` is at most 21,976 on
 the autosomes, so the threshold above corresponds to a call rate of roughly
 0.68; choose your own according to how much power your analysis needs. See
 [data-dictionary.md](data-dictionary.md#core-frequency-fields).

@@ -24,7 +24,7 @@ runs it with `--merge-batches true`, which merges the batches before the
 statistics are written, so only cohort-wide values exist and they carry the
 plain, unprefixed names. The `AC`, `AN`, `NS`, `NS_GT`, `NS_NOGT` and
 `NS_NODATA` in a published file are therefore unambiguous: they are always the
-whole-cohort values across all 11,000 genomes. The release gate
+whole-cohort values across all 10,988 genomes. The release gate
 [`scripts/verify_sites_only.py`](../scripts/verify_sites_only.py) fails the
 release if any INFO key outside the published allow-list appears in the output,
 which is what would catch a batch-level field surviving export.
@@ -142,7 +142,7 @@ These are the fields most users will consume. All are cohort-wide.
 | `call_rate` | 1 | Float | **Derived.** Call rate, `NS_GT / NS`, 0-1 |
 
 **Interpreting `AN`.** `AF` alone is not sufficient for variant
-classification. With 11,000 samples, `AN` is at most 22,000 on the autosomes. A
+classification. With 10,988 samples, `AN` is at most 21,976 on the autosomes. A
 site with `AF = 0` and `AN = 21,000` is well-powered evidence of absence in
 Koreans; a site with `AF = 0` and `AN = 400` is not. Always read `AN` alongside
 `AF`, and consult the callability resources described in

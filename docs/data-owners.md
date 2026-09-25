@@ -188,7 +188,7 @@ individual genotypes, no participant identifiers and no participant-level
 metadata, so there is nothing to link a published count back to. The classical
 attack on aggregate allele frequencies assumes the attacker already holds the
 target individual's genotypes, and its feasibility is governed by cohort size
-rather than by whether singletons are shown. At 11,000 records for the whole
+rather than by whether singletons are shown. At 10,988 records for the whole
 cohort and 2,987 for the Jeju stratum, both are far above the range where that
 attack is practical. Data that genuinely is re-identifiable lives in the
 controlled tier, where it is bound by an agreement rather than published.
